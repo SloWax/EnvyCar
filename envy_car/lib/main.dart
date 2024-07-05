@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           //     bodyMedium:
           //         TextStyle(fontSize: 32, fontStyle: FontStyle.italic))
         ),
-        // home: LoginView());
-        home: AddCarView());
+        // home: const LoginView());
+        home: const AddCarView());
   }
 }
