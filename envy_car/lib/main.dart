@@ -1,4 +1,5 @@
 import 'package:envy_car/Car/AddCarView.dart';
+import 'package:envy_car/Car/CarInfoView.dart';
 import 'package:envy_car/Login/LoginView.dart';
 import 'package:flutter/material.dart';
 
@@ -14,16 +15,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: '오일갈쟈',
         theme: ThemeData(
-          brightness: Brightness.dark,
-          // appBarTheme: AppBarTheme(backgroundColor: Colors.redAccent),
-          colorSchemeSeed: Colors.blueGrey,
-          useMaterial3: true,
-          // textTheme: const TextTheme(
-          //     titleLarge: TextStyle(fontSize: 12),
-          //     bodyMedium:
-          //         TextStyle(fontSize: 32, fontStyle: FontStyle.italic))
-        ),
+            brightness: Brightness.dark,
+            // appBarTheme: AppBarTheme(backgroundColor: Colors.redAccent),
+            colorSchemeSeed: Colors.blueGrey,
+            useMaterial3: true,
+            textTheme: const TextTheme(
+                //     titleLarge: TextStyle(fontSize: 12),
+                bodyMedium:
+                    TextStyle(fontSize: 32, fontStyle: FontStyle.italic))),
         // home: const LoginView());
-        home: const AddCarView());
+        // home: const AddCarView());
+        home: const CarInfoView());
   }
 }

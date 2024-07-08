@@ -7,7 +7,18 @@ class AddCarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: const Text('차량 등록')),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('차량 등록'),
+        actions: [
+          Visibility(
+              visible: true,
+              child: IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.close),
+              ))
+        ],
+      ),
       body: SafeArea(
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -72,6 +83,18 @@ class AddCarView extends StatelessWidget {
                       foregroundColor: Colors.blueGrey.shade200),
                   onPressed: () {},
                   child: const Text('관리시작일'))),
+          Container(
+              margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+              child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.only(top: 5, bottom: 5),
+                      side:
+                          BorderSide(width: 1, color: Colors.blueGrey.shade200),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      foregroundColor: Colors.blueGrey.shade200),
+                  onPressed: () {},
+                  child: const Text('현재 주행거리'))),
           const Spacer(),
           Container(
               margin: const EdgeInsets.only(left: 30.0, right: 30.0),
