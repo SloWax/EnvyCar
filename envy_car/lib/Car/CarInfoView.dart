@@ -8,6 +8,27 @@ class CarInfoView extends StatefulWidget {
 }
 
 class _CarInfoViewState extends State<CarInfoView> {
+  final List<GlobalKey> _listTileKeys =
+      List.generate(10, (index) => GlobalKey());
+  double? _listTileHeight;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getListTileHeight();
+    });
+  }
+
+  void _getListTileHeight() {
+    final renderBox =
+        _listTileKeys.first.currentContext?.findRenderObject() as RenderBox;
+    final height = renderBox.size.height;
+    setState(() {
+      _listTileHeight = height;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,15 +112,27 @@ class _CarInfoViewState extends State<CarInfoView> {
                   )),
               const SizedBox(height: 10),
               SizedBox(
-                height: 600, // 리스트뷰의 높이를 지정
+                height: (_listTileHeight ?? 0) * 10, // 리스트뷰의 높이를 지정
                 child: ListView.builder(
                   shrinkWrap: true, // 스크롤 뷰와 충돌하지 않도록
                   physics:
                       const NeverScrollableScrollPhysics(), // 리스트뷰 자체의 스크롤 비활성화
                   itemCount: 10,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text('Item $index'),
+                    const start = 0;
+                    const now = 700;
+                    const end = 10000;
+                    const progress = now / (end - start);
+                    const mileage = end - now;
+
+                    return MaintenanceListTile(
+                      key: _listTileKeys[index],
+                      title: '엔진오일 $index',
+                      subtitle: '$mileage km 또는 12개월 남음',
+                      progress: progress,
+                      start: start,
+                      now: now,
+                      end: end,
                     );
                   },
                 ),
@@ -107,5 +140,55 @@ class _CarInfoViewState extends State<CarInfoView> {
             ],
           ),
         ));
+  }
+}
+
+class MaintenanceListTile extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final double progress;
+  final int start;
+  final int now;
+  final int end;
+
+  const MaintenanceListTile(
+      {super.key,
+      required this.title,
+      required this.subtitle,
+      required this.progress,
+      required this.start,
+      required this.now,
+      required this.end});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ListTile(
+            title: Text(title),
+            subtitle: Text(subtitle, style: const TextStyle(fontSize: 18)),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: LinearProgressIndicator(
+              color: Colors.blueGrey,
+              value: progress, // 프로그레스 값 설정
+            ),
+          ),
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('$start km', style: TextStyle(fontSize: 12)),
+                  Text('$end km', style: TextStyle(fontSize: 12))
+                ],
+              ))
+        ],
+      ),
+    );
   }
 }
