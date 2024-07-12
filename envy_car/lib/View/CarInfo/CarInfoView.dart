@@ -1,3 +1,4 @@
+import 'package:envy_car/Extension/Extension+int.dart';
 import 'package:flutter/material.dart';
 
 class CarInfoView extends StatefulWidget {
@@ -96,13 +97,13 @@ class _CarInfoViewState extends State<CarInfoView> {
                             children: [
                               TextButton(
                                   onPressed: () {},
-                                  child: const Text('누적 주행거리 +\n10,000km',
+                                  child: const Text('누적 주행거리 +\n0km',
                                       style: TextStyle(
                                           fontSize: 18, color: Colors.white))),
                               const Spacer(),
                               TextButton(
                                   onPressed: () {},
-                                  child: const Text('22.01.07 >\n100일째 관리중',
+                                  child: const Text('22.01.07 >\n0일째 관리중',
                                       style: TextStyle(
                                           fontSize: 18, color: Colors.white))),
                               const Spacer()
@@ -121,14 +122,14 @@ class _CarInfoViewState extends State<CarInfoView> {
                   itemBuilder: (context, index) {
                     const start = 0;
                     const now = 700;
-                    const end = 10000;
+                    const end = 100000;
                     const progress = now / (end - start);
                     const mileage = end - now;
 
                     return MaintenanceListTile(
                       key: _listTileKeys[index],
                       title: '엔진오일 $index',
-                      subtitle: '$mileage km 또는 12개월 남음',
+                      subtitle: '${mileage.toNumberFormat()} km 또는 12개월 남음',
                       progress: progress,
                       start: start,
                       now: now,
@@ -183,8 +184,10 @@ class MaintenanceListTile extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('$start km', style: TextStyle(fontSize: 12)),
-                  Text('$end km', style: TextStyle(fontSize: 12))
+                  Text('${start.toNumberFormat()}km',
+                      style: const TextStyle(fontSize: 12)),
+                  Text('${end.toNumberFormat()}km',
+                      style: const TextStyle(fontSize: 12))
                 ],
               ))
         ],
