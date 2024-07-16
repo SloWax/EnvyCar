@@ -1,6 +1,6 @@
 import 'package:envy_car/Extension/Extension+int.dart';
-import 'package:envy_car/View/CarInfo/MaintenanceListTile.dart';
-import 'package:envy_car/View/CarInfo/PopUpMenu.dart';
+import 'package:envy_car/View/Custom/MaintenanceListTile.dart';
+import 'package:envy_car/View/Custom/PopUpMenu.dart';
 import 'package:flutter/material.dart';
 
 class CarInfoView extends StatefulWidget {

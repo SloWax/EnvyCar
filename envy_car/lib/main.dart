@@ -1,6 +1,7 @@
 import 'package:envy_car/View/AddCar/AddCarView.dart';
 import 'package:envy_car/View/CarInfo/CarInfoView.dart';
 import 'package:envy_car/View/Login/LoginView.dart';
+import 'package:envy_car/View/MaintenanceArticle/MaintenanceArticleView.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
                     TextStyle(fontSize: 32, fontStyle: FontStyle.italic))),
         // home: const LoginView());
         // home: const AddCarView());
-        home: const CarInfoView());
+        // home: const CarInfoView());
+        home: const MaintenanceArticleView());
   }
 }
