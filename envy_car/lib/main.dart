@@ -1,11 +1,19 @@
-import 'package:envy_car/View/AddCar/AddCarView.dart';
-import 'package:envy_car/View/CarInfo/CarInfoView.dart';
-import 'package:envy_car/View/Login/LoginView.dart';
-import 'package:envy_car/View/MaintenanceArticle/MaintenanceArticleView.dart';
+import 'package:envy_car/Presentation/Car/AddCar/AddCarView.dart';
+import 'package:envy_car/Presentation/Car/CarVM.dart';
+import 'package:envy_car/Presentation/Car/CarInfo/CarInfoView.dart';
+import 'package:envy_car/Presentation/Login/LoginView.dart';
+import 'package:envy_car/Presentation/MaintenanceArticle/MaintenanceArticleView.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => CarVM()),
+      // ChangeNotifierProvider(create: (context) => TodoModel()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -26,7 +34,7 @@ class MyApp extends StatelessWidget {
                     TextStyle(fontSize: 32, fontStyle: FontStyle.italic))),
         // home: const LoginView());
         // home: const AddCarView());
-        // home: const CarInfoView());
-        home: const MaintenanceArticleView());
+        home: const CarInfoView());
+    // home: const MaintenanceArticleView());
   }
 }

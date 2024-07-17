@@ -1,3 +1,4 @@
+import 'package:envy_car/Presentation/Car/AddCar/AddCarView.dart';
 import 'package:flutter/material.dart';
 
 class PopupMenuWidget extends StatelessWidget {
@@ -15,9 +16,9 @@ class PopupMenuWidget extends StatelessWidget {
         // ];
       },
       onSelected: (value) => {
-        print(value)
-        // Navigator.push(context,
-        //     MaterialPageRoute(builder: (context) => ImageViewer(value.image)))
+        print(value),
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const AddCarView()))
       },
     );
   }

@@ -100,9 +100,7 @@ class AddCarView extends StatelessWidget {
               margin: const EdgeInsets.only(left: 30.0, right: 30.0),
               child:
                   ElevatedButton(onPressed: () {}, child: const Text('설정 완료'))),
-          const SizedBox(
-            height: 15,
-          )
+          const SizedBox(height: 15)
         ],
       )),
     );

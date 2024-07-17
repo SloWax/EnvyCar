@@ -1,6 +1,6 @@
-import 'package:envy_car/View/AddCar/AddCarView.dart';
-import 'package:envy_car/View/CarInfo/CarInfoView.dart';
-import 'package:envy_car/View/Login/LoginView.dart';
+import 'package:envy_car/Presentation/Car/AddCar/AddCarView.dart';
+import 'package:envy_car/Presentation/Car/CarInfo/CarInfoView.dart';
+import 'package:envy_car/Presentation/Login/LoginView.dart';
 import 'package:flutter/material.dart';
 
 void main() {
