@@ -1,5 +1,5 @@
 import 'package:envy_car/Extension/Extension+int.dart';
-import 'package:envy_car/Presentation/Car/CarVM.dart';
+import 'package:envy_car/Presentation/Car/CarInfo/CarInfoVM.dart';
 import 'package:envy_car/Presentation/Custom/MaintenanceListTile.dart';
 import 'package:envy_car/Presentation/Custom/PopUpMenu.dart';
 import 'package:flutter/material.dart';
@@ -40,8 +40,8 @@ class _CarInfoViewState extends State<CarInfoView> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (!Provider.of<CarVM>(context, listen: false).isWeatherLoad) {
-      Provider.of<CarVM>(context, listen: true).getCurrentLocation();
+    if (!Provider.of<CarInfoVM>(context, listen: false).isWeatherLoad) {
+      Provider.of<CarInfoVM>(context, listen: true).getCurrentLocation();
     }
   }
 
@@ -95,9 +95,10 @@ class _CarInfoViewState extends State<CarInfoView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                if (Provider.of<CarVM>(context, listen: false)
+                                if (Provider.of<CarInfoVM>(context,
+                                        listen: false)
                                     .isWeatherLoad)
-                                  Consumer<CarVM>(
+                                  Consumer<CarInfoVM>(
                                       builder: (context, value, child) {
                                     return Text(
                                       value.carwashMessage,
@@ -105,9 +106,10 @@ class _CarInfoViewState extends State<CarInfoView> {
                                     );
                                   }),
                                 const SizedBox(width: 10),
-                                if (Provider.of<CarVM>(context, listen: false)
+                                if (Provider.of<CarInfoVM>(context,
+                                        listen: false)
                                     .isWeatherLoad)
-                                  Consumer<CarVM>(
+                                  Consumer<CarInfoVM>(
                                       builder: (context, value, child) {
                                     return Image.asset(
                                       'assets/WeatherIcon/${value.result.icon}@2x.png', // 이미지 경로

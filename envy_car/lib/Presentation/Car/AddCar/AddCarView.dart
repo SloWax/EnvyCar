@@ -1,5 +1,8 @@
+import 'package:envy_car/Presentation/Car/AddCar/AddCarVM.dart';
+import 'package:envy_car/Presentation/Custom/TextInputModal.dart';
+import 'package:envy_car/Presentation/Model/Enum.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 class AddCarView extends StatelessWidget {
   const AddCarView({super.key});
@@ -26,9 +29,13 @@ class AddCarView extends StatelessWidget {
           const Spacer(),
           Container(
               margin: const EdgeInsets.only(left: 30.0, right: 30.0),
-              child: const TextField(
+              child: TextField(
+                onChanged: (value) {
+                  Provider.of<AddCarVM>(context, listen: false)
+                      .updateCarName(value);
+                },
                 textAlign: TextAlign.center,
-                decoration: InputDecoration(hintText: '차량번호 or 애칭'),
+                decoration: const InputDecoration(hintText: '차량번호 or 애칭'),
               )),
           const SizedBox(
             height: 30,
@@ -39,32 +46,46 @@ class AddCarView extends StatelessWidget {
               Expanded(
                   child: Container(
                 margin: const EdgeInsets.only(left: 30.0, right: 15.0),
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      side: BorderSide(width: 1, color: Colors.yellow.shade700),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      foregroundColor: Colors.yellow.shade700),
-                  onPressed: () {},
-                  child:
-                      const Text('Gasoline\n휘발유', textAlign: TextAlign.center),
-                ),
+                child: Consumer<AddCarVM>(builder: (context, model, child) {
+                  return OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.only(top: 5, bottom: 5),
+                        side:
+                            BorderSide(width: 1, color: Colors.yellow.shade700),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        foregroundColor: Colors.yellow.shade700,
+                        backgroundColor: model.gasolineColor),
+                    onPressed: () {
+                      Provider.of<AddCarVM>(context, listen: false)
+                          .updateFuel(Fuel.gasoline);
+                    },
+                    child: const Text('Gasoline\n휘발유',
+                        textAlign: TextAlign.center),
+                  );
+                }),
               )),
               Expanded(
                   child: Container(
                 margin: const EdgeInsets.only(left: 15.0, right: 30.0),
-                child: OutlinedButton(
+                child: Consumer<AddCarVM>(builder: (context, model, child) {
+                  return OutlinedButton(
                     style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.only(top: 5, bottom: 5),
                         side: BorderSide(
                             width: 1.5, color: Colors.green.shade900),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
-                        foregroundColor: Colors.green.shade900),
-                    onPressed: () {},
+                        foregroundColor: Colors.green.shade900,
+                        backgroundColor: model.dieselColor),
+                    onPressed: () {
+                      Provider.of<AddCarVM>(context, listen: false)
+                          .updateFuel(Fuel.diesel);
+                    },
                     child:
-                        const Text('Diesel\n경유', textAlign: TextAlign.center)),
+                        const Text('Diesel\n경유', textAlign: TextAlign.center),
+                  );
+                }),
               ))
             ],
           ),
@@ -73,33 +94,71 @@ class AddCarView extends StatelessWidget {
           ),
           Container(
               margin: const EdgeInsets.only(left: 30.0, right: 30.0),
-              child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      side:
-                          BorderSide(width: 1, color: Colors.blueGrey.shade200),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      foregroundColor: Colors.blueGrey.shade200),
-                  onPressed: () {},
-                  child: const Text('관리시작일'))),
+              child: Consumer<AddCarVM>(builder: (context, model, child) {
+                return OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.only(top: 5, bottom: 5),
+                        side: BorderSide(
+                            width: 1, color: Colors.blueGrey.shade200),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        foregroundColor: Colors.blueGrey.shade200),
+                    onPressed: () async {
+                      DateTime? selectedDate = await showDatePicker(
+                        context: context,
+                        initialDate:
+                            Provider.of<AddCarVM>(context, listen: false)
+                                .startDate,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2101),
+                      );
+                      if (selectedDate != null) {
+                        Provider.of<AddCarVM>(context, listen: false)
+                            .updateSelectedDate(selectedDate);
+                      }
+                    },
+                    child: Text(model.startBtnText));
+              })),
           Container(
               margin: const EdgeInsets.only(left: 30.0, right: 30.0),
-              child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      side:
-                          BorderSide(width: 1, color: Colors.blueGrey.shade200),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      foregroundColor: Colors.blueGrey.shade200),
-                  onPressed: () {},
-                  child: const Text('현재 주행거리'))),
+              child: Consumer<AddCarVM>(builder: (context, model, child) {
+                return OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.only(top: 5, bottom: 5),
+                        side: BorderSide(
+                            width: 1, color: Colors.blueGrey.shade200),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        foregroundColor: Colors.blueGrey.shade200),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return const TextInputModal(
+                              modalKey: ModalKey.addCar,
+                              title: '현재 주행거리',
+                              decoration: 'km',
+                              isHiddenDate: true);
+                        },
+                      );
+                    },
+                    child: Text(model.mileageBtnText));
+              })),
           const Spacer(),
           Container(
               margin: const EdgeInsets.only(left: 30.0, right: 30.0),
-              child:
-                  ElevatedButton(onPressed: () {}, child: const Text('설정 완료'))),
+              child: Consumer<AddCarVM>(builder: (context, model, child) {
+                return ElevatedButton(
+                    onPressed: model.isEnabledConfirm
+                        ? () {
+                            Object object =
+                                Provider.of<AddCarVM>(context, listen: false)
+                                    .carModel;
+                            print(object);
+                          }
+                        : null,
+                    child: const Text('설정 완료'));
+              })),
           const SizedBox(height: 15)
         ],
       )),

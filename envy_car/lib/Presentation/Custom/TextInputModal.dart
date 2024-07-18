@@ -1,37 +1,28 @@
+import 'package:envy_car/Presentation/Car/AddCar/AddCarVM.dart';
+import 'package:envy_car/Presentation/Model/Enum.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class MaintenanceInputModal extends StatefulWidget {
+class TextInputModal extends StatefulWidget {
+  final ModalKey modalKey;
   final String title;
   final String decoration;
   final bool isHiddenDate;
 
-  const MaintenanceInputModal(
+  const TextInputModal(
       {super.key,
+      required this.modalKey,
       required this.title,
       required this.decoration,
       required this.isHiddenDate});
 
   @override
-  _MaintenanceInputModalState createState() => _MaintenanceInputModalState();
+  _TextInputModalState createState() => _TextInputModalState();
 }
 
-class _MaintenanceInputModalState extends State<MaintenanceInputModal> {
+class _TextInputModalState extends State<TextInputModal> {
   final TextEditingController numberController = TextEditingController();
   DateTime? selectedDate;
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +42,19 @@ class _MaintenanceInputModalState extends State<MaintenanceInputModal> {
       actions: [
         if (!widget.isHiddenDate)
           TextButton(
-            onPressed: () => _selectDate(context),
+            onPressed: () async {
+              DateTime? picked = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2101),
+              );
+              if (picked != null && picked != selectedDate) {
+                setState(() {
+                  selectedDate = picked;
+                });
+              }
+            },
             child: const Text('날짜 선택'),
           ),
         TextButton(
@@ -65,6 +68,13 @@ class _MaintenanceInputModalState extends State<MaintenanceInputModal> {
             // Handle input here
             String number = numberController.text;
             print('Number: $number, Date: ${selectedDate.toString()}');
+
+            if (widget.modalKey == ModalKey.addCar) {
+              context.read<AddCarVM>().updateMileage(numberController.text);
+            } else if (widget.modalKey == ModalKey.maintenanceAdd) {
+            } else if (widget.modalKey == ModalKey.maintenanceMile) {
+            } else if (widget.modalKey == ModalKey.maintenanceCycle) {}
+
             Navigator.of(context).pop(); // Close the modal
           },
           child: const Text('입력'),

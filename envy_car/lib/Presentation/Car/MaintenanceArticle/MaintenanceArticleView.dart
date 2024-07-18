@@ -1,4 +1,5 @@
-import 'package:envy_car/Presentation/Custom/MaintenanceInputModal.dart';
+import 'package:envy_car/Presentation/Custom/TextInputModal.dart';
+import 'package:envy_car/Presentation/Model/Enum.dart';
 import 'package:flutter/material.dart';
 
 class MaintenanceArticleView extends StatefulWidget {
@@ -43,8 +44,11 @@ class _MaintenanceArticleViewState extends State<MaintenanceArticleView> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return const MaintenanceInputModal(
-                        title: '오일오일', decoration: 'km', isHiddenDate: false);
+                    return const TextInputModal(
+                        modalKey: ModalKey.maintenanceAdd,
+                        title: '오일오일',
+                        decoration: 'km',
+                        isHiddenDate: false);
                   },
                 );
               },
@@ -90,7 +94,8 @@ class _MaintenanceArticleViewState extends State<MaintenanceArticleView> {
                                     showDialog(
                                       context: context,
                                       builder: (context) {
-                                        return const MaintenanceInputModal(
+                                        return const TextInputModal(
+                                            modalKey: ModalKey.maintenanceMile,
                                             title: '거리 설정',
                                             decoration: 'km',
                                             isHiddenDate: true);
@@ -105,7 +110,8 @@ class _MaintenanceArticleViewState extends State<MaintenanceArticleView> {
                                     showDialog(
                                       context: context,
                                       builder: (context) {
-                                        return const MaintenanceInputModal(
+                                        return const TextInputModal(
+                                            modalKey: ModalKey.maintenanceCycle,
                                             title: '주기 설정',
                                             decoration: '개월',
                                             isHiddenDate: true);
