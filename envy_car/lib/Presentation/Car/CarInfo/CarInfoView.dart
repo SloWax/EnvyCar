@@ -1,7 +1,10 @@
 import 'package:envy_car/Extension/Extension+int.dart';
 import 'package:envy_car/Presentation/Car/CarInfo/CarInfoVM.dart';
+import 'package:envy_car/Presentation/Car/MaintenanceArticle/MaintenanceArticleView.dart';
 import 'package:envy_car/Presentation/Custom/MaintenanceListTile.dart';
 import 'package:envy_car/Presentation/Custom/PopUpMenu.dart';
+import 'package:envy_car/Presentation/Model/Enum.dart';
+import 'package:envy_car/Util/CarManager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,8 +16,8 @@ class CarInfoView extends StatefulWidget {
 }
 
 class _CarInfoViewState extends State<CarInfoView> {
-  final List<GlobalKey> _listTileKeys =
-      List.generate(10, (index) => GlobalKey());
+  late CarManager manager;
+  late List<GlobalKey> _listTileKeys;
   double? _listTileHeight;
 
   void _getListTileHeight() {
@@ -31,6 +34,15 @@ class _CarInfoViewState extends State<CarInfoView> {
   @override
   void initState() {
     super.initState();
+
+    manager = CarManager();
+
+    // manager의 변수를 참조하여 _listTileKeys를 초기화
+    _listTileKeys = List.generate(
+      manager.car.maintenanceList.length,
+      (index) => GlobalKey(),
+    );
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getListTileHeight();
     });
@@ -47,6 +59,11 @@ class _CarInfoViewState extends State<CarInfoView> {
 
   @override
   Widget build(BuildContext context) {
+    Duration difference = DateTime.now().difference(manager.car.manageDate);
+    final mileage = manager.car.mileage;
+    final date = difference.inDays;
+    final list = manager.car.maintenanceList;
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -71,8 +88,8 @@ class _CarInfoViewState extends State<CarInfoView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('차량 번호',
-                                style: TextStyle(
+                            Text(manager.car.carName,
+                                style: const TextStyle(
                                     fontSize: 24, fontWeight: FontWeight.bold)),
                             const SizedBox(height: 10),
                             RichText(
@@ -83,7 +100,9 @@ class _CarInfoViewState extends State<CarInfoView> {
                                     style: TextStyle(fontSize: 18),
                                   ),
                                   TextSpan(
-                                    text: '휘발유',
+                                    text: manager.car.fuel == Fuel.gasoline
+                                        ? '휘발유'
+                                        : '경유',
                                     style: TextStyle(
                                         color: Colors.yellow.shade700,
                                         fontSize: 18),
@@ -134,14 +153,15 @@ class _CarInfoViewState extends State<CarInfoView> {
                             children: [
                               TextButton(
                                   onPressed: () {},
-                                  child: const Text('누적 주행거리 +\n0km',
-                                      style: TextStyle(
+                                  child: Text(
+                                      '누적 주행거리 +\n${mileage.toNumberFormat()}km',
+                                      style: const TextStyle(
                                           fontSize: 18, color: Colors.white))),
                               const Spacer(),
                               TextButton(
                                   onPressed: () {},
-                                  child: const Text('22.01.07 >\n0일째 관리중',
-                                      style: TextStyle(
+                                  child: Text('22.01.07 >\n$date일째 관리중',
+                                      style: const TextStyle(
                                           fontSize: 18, color: Colors.white))),
                               const Spacer()
                             ],
@@ -150,27 +170,26 @@ class _CarInfoViewState extends State<CarInfoView> {
                   )),
               const SizedBox(height: 10),
               SizedBox(
-                height: (_listTileHeight ?? 0) * 10, // 리스트뷰의 높이를 지정
+                height: (_listTileHeight ?? 0) * list.length, // 리스트뷰의 높이를 지정
                 child: ListView.builder(
                   shrinkWrap: true, // 스크롤 뷰와 충돌하지 않도록
                   physics:
                       const NeverScrollableScrollPhysics(), // 리스트뷰 자체의 스크롤 비활성화
-                  itemCount: 10,
+                  itemCount: list.length,
                   itemBuilder: (context, index) {
-                    const start = 0;
-                    const now = 700;
-                    const end = 100000;
-                    const progress = now / (end - start);
-                    const mileage = end - now;
-
                     return MaintenanceListTile(
                       key: _listTileKeys[index],
-                      title: '엔진오일 $index',
-                      subtitle: '${mileage.toNumberFormat()} km 또는 12개월 남음',
-                      progress: progress,
-                      start: start,
-                      now: now,
-                      end: end,
+                      data: list[index],
+                      mileage: mileage,
+                      manageDate: manager.car.manageDate,
+                      onTap: () {
+                        print('objectobjectobjectobject');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MaintenanceArticleView(data: list[index])));
+                      },
                     );
                   },
                 ),

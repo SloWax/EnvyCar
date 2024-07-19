@@ -1,11 +1,24 @@
 import 'package:envy_car/Presentation/Car/AddCar/AddCarVM.dart';
+import 'package:envy_car/Presentation/Car/CarInfo/CarInfoView.dart';
 import 'package:envy_car/Presentation/Custom/TextInputModal.dart';
+import 'package:envy_car/Presentation/Model/CarModel.dart';
 import 'package:envy_car/Presentation/Model/Enum.dart';
+import 'package:envy_car/Util/CarManager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddCarView extends StatelessWidget {
   const AddCarView({super.key});
+
+  void pushNext(BuildContext context) {
+    var manager = CarManager();
+
+    Car object = Provider.of<AddCarVM>(context, listen: false).makeCar();
+    manager.setCar(object);
+
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const CarInfoView()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +122,7 @@ class AddCarView extends StatelessWidget {
                         initialDate:
                             Provider.of<AddCarVM>(context, listen: false)
                                 .startDate,
-                        firstDate: DateTime(2000),
+                        firstDate: DateTime(1900),
                         lastDate: DateTime(2101),
                       );
                       if (selectedDate != null) {
@@ -149,14 +162,8 @@ class AddCarView extends StatelessWidget {
               margin: const EdgeInsets.only(left: 30.0, right: 30.0),
               child: Consumer<AddCarVM>(builder: (context, model, child) {
                 return ElevatedButton(
-                    onPressed: model.isEnabledConfirm
-                        ? () {
-                            Object object =
-                                Provider.of<AddCarVM>(context, listen: false)
-                                    .carModel;
-                            print(object);
-                          }
-                        : null,
+                    onPressed:
+                        model.isEnabledConfirm ? () => pushNext(context) : null,
                     child: const Text('설정 완료'));
               })),
           const SizedBox(height: 15)

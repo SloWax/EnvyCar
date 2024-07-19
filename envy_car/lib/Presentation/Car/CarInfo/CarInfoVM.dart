@@ -4,11 +4,15 @@ import 'package:envy_car/Service/WeatherService.dart';
 import 'package:flutter/material.dart';
 
 class CarInfoVM with ChangeNotifier {
-  String lon = "";
-  String lat = "";
-  String carwashMessage = "";
-  Weather result = Weather(0.0, 0.0, 0, '', '', 0.0);
-  bool isWeatherLoad = false;
+  String _lon = "";
+  String _lat = "";
+  String _carwashMessage = "";
+  Weather _result = Weather(0.0, 0.0, 0, '', '', 0.0);
+  bool _isWeatherLoad = false;
+
+  String get carwashMessage => _carwashMessage;
+  Weather get result => _result;
+  bool get isWeatherLoad => _isWeatherLoad;
 
   Future<void> getCurrentLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
@@ -17,7 +21,7 @@ class CarInfoVM with ChangeNotifier {
     }
 
     if (permission == LocationPermission.denied) {
-      isWeatherLoad = true;
+      _isWeatherLoad = true;
 
       return;
     }
@@ -25,31 +29,31 @@ class CarInfoVM with ChangeNotifier {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
-    lat = '${position.latitude}';
-    lon = '${position.longitude}';
+    _lat = '${position.latitude}';
+    _lon = '${position.longitude}';
 
     getWeatherData();
   }
 
   void getWeatherData() async {
     WeatherService helper = WeatherService();
-    result = await helper.getWeather(lat, lon);
+    _result = await helper.getWeather(_lat, _lon);
 
-    int code = (result.weatherCode ~/ 100);
+    int code = (_result.weatherCode ~/ 100);
 
-    if (result.weatherCode == 800) {
-      carwashMessage = '세차하기 좋은날이에요:)';
+    if (_result.weatherCode == 800) {
+      _carwashMessage = '세차하기 좋은날이에요:)';
     } else if (code == 7 || code == 8) {
-      carwashMessage = '흐린날씨이니 일기예보를 확인해주세요!';
+      _carwashMessage = '흐린날씨이니 일기예보를 확인해주세요!';
     } else if (code == 2 || code == 3 || code == 5) {
-      carwashMessage = '비 소식이 있으니 세차를 피해주세요!';
+      _carwashMessage = '비 소식이 있으니 세차를 피해주세요!';
     } else if (code == 6) {
-      carwashMessage = '눈 소식이 있으니 세차를 피해주세요!';
+      _carwashMessage = '눈 소식이 있으니 세차를 피해주세요!';
     } else {
-      carwashMessage = result.description;
+      _carwashMessage = _result.description;
     }
 
-    isWeatherLoad = true;
+    _isWeatherLoad = true;
 
     notifyListeners();
   }

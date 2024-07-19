@@ -1,3 +1,4 @@
+import 'package:envy_car/Presentation/Car/AddCar/AddCarVM.dart';
 import 'package:envy_car/Presentation/Car/AddCar/AddCarView.dart';
 import 'package:envy_car/Presentation/Car/CarInfo/CarInfoVM.dart';
 import 'package:envy_car/Presentation/Car/CarInfo/CarInfoView.dart';
@@ -9,6 +10,7 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(MultiProvider(
     providers: [
+      ChangeNotifierProvider(create: (context) => AddCarVM()),
       ChangeNotifierProvider(create: (context) => CarInfoVM()),
       // ChangeNotifierProvider(create: (context) => TodoModel()),
     ],
@@ -33,8 +35,8 @@ class MyApp extends StatelessWidget {
                 bodyMedium:
                     TextStyle(fontSize: 32, fontStyle: FontStyle.italic))),
         // home: const LoginView());
-        // home: const AddCarView());
-        // home: const CarInfoView());
-        home: const MaintenanceArticleView());
+        home: const AddCarView());
+    // home: const CarInfoView());
+    // home: const MaintenanceArticleView());
   }
 }

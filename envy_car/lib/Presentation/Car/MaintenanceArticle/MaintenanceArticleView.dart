@@ -1,24 +1,35 @@
 import 'package:envy_car/Presentation/Custom/TextInputModal.dart';
+import 'package:envy_car/Presentation/Model/CarModel.dart';
 import 'package:envy_car/Presentation/Model/Enum.dart';
+import 'package:envy_car/Util/CarManager.dart';
 import 'package:flutter/material.dart';
 
 class MaintenanceArticleView extends StatefulWidget {
-  const MaintenanceArticleView({super.key});
+  final Maintenance data;
+  const MaintenanceArticleView({super.key, required this.data});
 
   @override
   State<MaintenanceArticleView> createState() => _MaintenanceArticleViewState();
 }
 
 class _MaintenanceArticleViewState extends State<MaintenanceArticleView> {
-  final List<GlobalKey> _listTileKeys =
-      List.generate(20, (index) => GlobalKey());
+  late List<GlobalKey> _listTileKeys;
   double? _listTileHeight;
 
   @override
   void initState() {
     super.initState();
+
+    // manager의 변수를 참조하여 _listTileKeys를 초기화
+    _listTileKeys = List.generate(
+      widget.data.history.length,
+      (index) => GlobalKey(),
+    );
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getListTileHeight();
+      if (widget.data.history.length > 0) {
+        _getListTileHeight();
+      }
     });
   }
 
@@ -127,12 +138,13 @@ class _MaintenanceArticleViewState extends State<MaintenanceArticleView> {
                   )),
               const SizedBox(height: 10),
               SizedBox(
-                height: (_listTileHeight ?? 0) * 20, // 리스트뷰의 높이를 지정
+                height: (_listTileHeight ?? 0) *
+                    widget.data.history.length, // 리스트뷰의 높이를 지정
                 child: ListView.builder(
                   shrinkWrap: true, // 스크롤 뷰와 충돌하지 않도록
                   physics:
                       const NeverScrollableScrollPhysics(), // 리스트뷰 자체의 스크롤 비활성화
-                  itemCount: 20,
+                  itemCount: widget.data.history.length,
                   itemBuilder: (context, index) {
                     return Dismissible(
                         key: Key('$index'), // 각 항목의 고유 키
