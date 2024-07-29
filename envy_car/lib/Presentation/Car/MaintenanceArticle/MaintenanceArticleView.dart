@@ -1,7 +1,6 @@
 import 'package:envy_car/Presentation/Custom/TextInputModal.dart';
 import 'package:envy_car/Presentation/Model/CarModel.dart';
 import 'package:envy_car/Presentation/Model/Enum.dart';
-import 'package:envy_car/Util/CarManager.dart';
 import 'package:flutter/material.dart';
 
 class MaintenanceArticleView extends StatefulWidget {
@@ -20,17 +19,17 @@ class _MaintenanceArticleViewState extends State<MaintenanceArticleView> {
   void initState() {
     super.initState();
 
-    // manager의 변수를 참조하여 _listTileKeys를 초기화
-    _listTileKeys = List.generate(
-      widget.data.history.length,
-      (index) => GlobalKey(),
-    );
+    if (widget.data.history.isNotEmpty) {
+      // manager의 변수를 참조하여 _listTileKeys를 초기화
+      _listTileKeys = List.generate(
+        widget.data.history.length,
+        (index) => GlobalKey(),
+      );
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.data.history.length > 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         _getListTileHeight();
-      }
-    });
+      });
+    }
   }
 
   void _getListTileHeight() {
