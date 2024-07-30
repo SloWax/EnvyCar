@@ -9,7 +9,7 @@ class AddCarView extends StatelessWidget {
   const AddCarView({super.key});
 
   void pushNext(BuildContext context) {
-    Provider.of<AddCarVM>(context, listen: false).makeCar();
+    context.read<AddCarVM>().makeCar();
 
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const CarInfoView()));
@@ -21,14 +21,14 @@ class AddCarView extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('차량 등록'),
-        actions: [
-          Visibility(
-              visible: true,
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.close),
-              ))
-        ],
+        // actions: [
+        //   Visibility(
+        //       visible: true,
+        //       child: IconButton(
+        //         onPressed: () {},
+        //         icon: const Icon(Icons.close),
+        //       ))
+        // ],
       ),
       body: SafeArea(
           child: Column(
@@ -39,8 +39,7 @@ class AddCarView extends StatelessWidget {
               margin: const EdgeInsets.only(left: 30.0, right: 30.0),
               child: TextField(
                 onChanged: (value) {
-                  Provider.of<AddCarVM>(context, listen: false)
-                      .updateCarName(value);
+                  context.read<AddCarVM>().updateCarName(value);
                 },
                 textAlign: TextAlign.center,
                 decoration: const InputDecoration(hintText: '차량번호 or 애칭'),
@@ -65,8 +64,7 @@ class AddCarView extends StatelessWidget {
                         foregroundColor: Colors.yellow.shade700,
                         backgroundColor: model.gasolineColor),
                     onPressed: () {
-                      Provider.of<AddCarVM>(context, listen: false)
-                          .updateFuel(Fuel.gasoline);
+                      context.read<AddCarVM>().updateFuel(Fuel.gasoline);
                     },
                     child: const Text('Gasoline\n휘발유',
                         textAlign: TextAlign.center),
@@ -87,8 +85,7 @@ class AddCarView extends StatelessWidget {
                         foregroundColor: Colors.green.shade900,
                         backgroundColor: model.dieselColor),
                     onPressed: () {
-                      Provider.of<AddCarVM>(context, listen: false)
-                          .updateFuel(Fuel.diesel);
+                      context.read<AddCarVM>().updateFuel(Fuel.diesel);
                     },
                     child:
                         const Text('Diesel\n경유', textAlign: TextAlign.center),
@@ -114,14 +111,13 @@ class AddCarView extends StatelessWidget {
                     onPressed: () async {
                       DateTime? selectedDate = await showDatePicker(
                         context: context,
-                        initialDate:
-                            Provider.of<AddCarVM>(context, listen: false)
-                                .startDate,
+                        initialDate: context.read<AddCarVM>().startDate,
                         firstDate: DateTime(1900),
                         lastDate: DateTime(2101),
                       );
                       if (selectedDate != null) {
-                        Provider.of<AddCarVM>(context, listen: false)
+                        context
+                            .read<AddCarVM>()
                             .updateSelectedDate(selectedDate);
                       }
                     },

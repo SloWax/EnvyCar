@@ -1,4 +1,5 @@
 import 'package:envy_car/Presentation/Car/AddCar/AddCarVM.dart';
+import 'package:envy_car/Presentation/Car/CarInfo/CarInfoVM.dart';
 import 'package:envy_car/Presentation/Model/Enum.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -65,12 +66,13 @@ class _TextInputModalState extends State<TextInputModal> {
         ),
         TextButton(
           onPressed: () {
-            // Handle input here
             String number = numberController.text;
             print('Number: $number, Date: ${selectedDate.toString()}');
 
             if (widget.modalKey == ModalKey.addCar) {
-              context.read<AddCarVM>().updateMileage(numberController.text);
+              context.read<AddCarVM>().updateMileage(number);
+            } else if (widget.modalKey == ModalKey.mileageSet) {
+              context.read<CarInfoVM>().setMilege(number);
             } else if (widget.modalKey == ModalKey.maintenanceAdd) {
             } else if (widget.modalKey == ModalKey.maintenanceMile) {
             } else if (widget.modalKey == ModalKey.maintenanceCycle) {}

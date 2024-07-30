@@ -1,5 +1,6 @@
 enum ModalKey {
   addCar,
+  mileageSet,
   maintenanceAdd,
   maintenanceMile,
   maintenanceCycle;

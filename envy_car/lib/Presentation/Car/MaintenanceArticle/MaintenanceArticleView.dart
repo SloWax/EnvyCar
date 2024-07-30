@@ -46,7 +46,7 @@ class _MaintenanceArticleViewState extends State<MaintenanceArticleView> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text('오일오일'),
+          title: Text(widget.data.name),
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
@@ -56,7 +56,7 @@ class _MaintenanceArticleViewState extends State<MaintenanceArticleView> {
                   builder: (context) {
                     return const TextInputModal(
                         modalKey: ModalKey.maintenanceAdd,
-                        title: '오일오일',
+                        title: '정비 내역',
                         decoration: 'km',
                         isHiddenDate: false);
                   },

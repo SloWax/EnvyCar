@@ -1,9 +1,13 @@
+import 'package:envy_car/Presentation/Model/CarModel.dart';
+import 'package:envy_car/Util/CarManager.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:envy_car/Presentation/Model/WeatherModel.dart';
 import 'package:envy_car/Service/WeatherService.dart';
 import 'package:flutter/material.dart';
 
 class CarInfoVM with ChangeNotifier {
+  var manager = CarManager();
+
   String _lon = "";
   String _lat = "";
   String _carwashMessage = "";
@@ -54,6 +58,37 @@ class CarInfoVM with ChangeNotifier {
     }
 
     _isWeatherLoad = true;
+
+    notifyListeners();
+  }
+
+  void changeCar(Car value, int index) {
+    manager.changeCar(value, index);
+
+    notifyListeners();
+  }
+
+  void deleteCar() {
+    manager.deleteCar();
+
+    notifyListeners();
+  }
+
+  void setMilege(String value) {
+    var mileage = int.tryParse(value) ?? 0;
+    var car = manager.car;
+
+    car.mileage = mileage;
+    manager.setCar(car);
+
+    notifyListeners();
+  }
+
+  void setDate(DateTime value) {
+    var car = manager.car;
+
+    car.manageDate = value;
+    manager.setCar(car);
 
     notifyListeners();
   }

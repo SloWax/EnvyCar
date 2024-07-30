@@ -3,6 +3,7 @@ import 'package:envy_car/Presentation/Car/CarInfo/CarInfoVM.dart';
 import 'package:envy_car/Presentation/Car/MaintenanceArticle/MaintenanceArticleView.dart';
 import 'package:envy_car/Presentation/Custom/MaintenanceListTile.dart';
 import 'package:envy_car/Presentation/Custom/PopUpMenu.dart';
+import 'package:envy_car/Presentation/Custom/TextInputModal.dart';
 import 'package:envy_car/Presentation/Model/Enum.dart';
 import 'package:envy_car/Util/CarManager.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class _CarInfoViewState extends State<CarInfoView> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (!Provider.of<CarInfoVM>(context, listen: false).isWeatherLoad) {
+    if (!context.read<CarInfoVM>().isWeatherLoad) {
       Provider.of<CarInfoVM>(context, listen: true).getCurrentLocation();
     }
   }
@@ -114,9 +115,7 @@ class _CarInfoViewState extends State<CarInfoView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                if (Provider.of<CarInfoVM>(context,
-                                        listen: false)
-                                    .isWeatherLoad)
+                                if (context.read<CarInfoVM>().isWeatherLoad)
                                   Consumer<CarInfoVM>(
                                       builder: (context, value, child) {
                                     return Text(
@@ -125,9 +124,7 @@ class _CarInfoViewState extends State<CarInfoView> {
                                     );
                                   }),
                                 const SizedBox(width: 10),
-                                if (Provider.of<CarInfoVM>(context,
-                                        listen: false)
-                                    .isWeatherLoad)
+                                if (context.read<CarInfoVM>().isWeatherLoad)
                                   Consumer<CarInfoVM>(
                                       builder: (context, value, child) {
                                     return Image.asset(
@@ -152,14 +149,38 @@ class _CarInfoViewState extends State<CarInfoView> {
                           child: Row(
                             children: [
                               TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return const TextInputModal(
+                                            modalKey: ModalKey.mileageSet,
+                                            title: '정비 내역',
+                                            decoration: 'km',
+                                            isHiddenDate: true);
+                                      },
+                                    );
+                                  },
                                   child: Text(
                                       '누적 주행거리 +\n${mileage.toNumberFormat()}km',
                                       style: const TextStyle(
                                           fontSize: 18, color: Colors.white))),
                               const Spacer(),
                               TextButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    DateTime? selectedDate =
+                                        await showDatePicker(
+                                      context: context,
+                                      initialDate: manager.car.manageDate,
+                                      firstDate: DateTime(1900),
+                                      lastDate: DateTime(2101),
+                                    );
+                                    if (selectedDate != null) {
+                                      context
+                                          .read<CarInfoVM>()
+                                          .setDate(selectedDate);
+                                    }
+                                  },
                                   child: Text('22.01.07 >\n$date일째 관리중',
                                       style: const TextStyle(
                                           fontSize: 18, color: Colors.white))),
@@ -183,7 +204,6 @@ class _CarInfoViewState extends State<CarInfoView> {
                       mileage: mileage,
                       manageDate: manager.car.manageDate,
                       onTap: () {
-                        print('objectobjectobjectobject');
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -194,11 +214,16 @@ class _CarInfoViewState extends State<CarInfoView> {
                   },
                 ),
               ),
-              TextButton(
-                  onPressed: () {},
-                  child: Text('차량 삭제',
-                      style: TextStyle(
-                          fontSize: 12, color: Colors.grey.shade700))),
+              Visibility(
+                visible: manager.user.carList.length > 1,
+                child: TextButton(
+                    onPressed: () {
+                      context.read<CarInfoVM>().deleteCar();
+                    },
+                    child: Text('차량 삭제',
+                        style: TextStyle(
+                            fontSize: 12, color: Colors.grey.shade700))),
+              ),
               const SizedBox(height: 10)
             ],
           ),

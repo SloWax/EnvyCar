@@ -41,13 +41,8 @@ class AddCarVM with ChangeNotifier {
 
     Car car = Car(carName, fuel, startDate, mileage, list);
 
-    // print(car.toJson());
-    // print(Car.fromJson(car.toJson()));
-
     var manager = CarManager();
     manager.setCar(car);
-
-    // return car;
   }
 
   void updateCarName(String value) {
