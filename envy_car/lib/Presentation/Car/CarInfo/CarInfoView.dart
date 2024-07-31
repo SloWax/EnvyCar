@@ -20,6 +20,7 @@ class _CarInfoViewState extends State<CarInfoView> {
   late CarManager manager;
   late List<GlobalKey> _listTileKeys;
   double? _listTileHeight;
+  final ScrollController _scrollController = ScrollController();
 
   void _getListTileHeight() {
     final renderBox = _listTileKeys.first.currentContext?.findRenderObject();
@@ -72,6 +73,7 @@ class _CarInfoViewState extends State<CarInfoView> {
           actions: const [PopupMenuWidget()],
         ),
         body: SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -218,7 +220,38 @@ class _CarInfoViewState extends State<CarInfoView> {
                 visible: manager.user.carList.length > 1,
                 child: TextButton(
                     onPressed: () {
-                      context.read<CarInfoVM>().deleteCar();
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('차량 삭제',
+                                style: TextStyle(fontSize: 24)),
+                            content: Text('${manager.car.carName}\n차량을 삭제할까요?',
+                                style: const TextStyle(fontSize: 18)),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('삭제',
+                                    style: TextStyle(
+                                        fontSize: 18, color: Colors.red)),
+                                onPressed: () {
+                                  context.read<CarInfoVM>().deleteCar();
+
+                                  _scrollController.jumpTo(0.0);
+
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: const Text('아니오',
+                                    style: TextStyle(fontSize: 18)),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                     child: Text('차량 삭제',
                         style: TextStyle(
@@ -228,5 +261,11 @@ class _CarInfoViewState extends State<CarInfoView> {
             ],
           ),
         ));
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
