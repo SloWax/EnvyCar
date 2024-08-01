@@ -1,8 +1,12 @@
 import 'package:envy_car/Presentation/Car/AddCar/AddCarVM.dart';
 import 'package:envy_car/Presentation/Car/CarInfo/CarInfoVM.dart';
+import 'package:envy_car/Presentation/Car/MaintenanceArticle/MaintenanceArticleVM.dart';
+import 'package:envy_car/Presentation/Car/MaintenanceArticle/MaintenanceArticleView.dart';
 import 'package:envy_car/Presentation/Model/Enum.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:envy_car/Extension/Extension+string.dart';
 
 class TextInputModal extends StatefulWidget {
   final ModalKey modalKey;
@@ -23,7 +27,7 @@ class TextInputModal extends StatefulWidget {
 
 class _TextInputModalState extends State<TextInputModal> {
   final TextEditingController numberController = TextEditingController();
-  DateTime? selectedDate;
+  DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +60,7 @@ class _TextInputModalState extends State<TextInputModal> {
                 });
               }
             },
-            child: const Text('날짜 선택'),
+            child: Text(DateFormat('yyyy-MM-dd').format(selectedDate)),
           ),
         TextButton(
           onPressed: () {
@@ -70,12 +74,18 @@ class _TextInputModalState extends State<TextInputModal> {
             print('Number: $number, Date: ${selectedDate.toString()}');
 
             if (widget.modalKey == ModalKey.addCar) {
-              context.read<AddCarVM>().updateMileage(number);
+              context.read<AddCarVM>().updateMileage(number.toInt());
             } else if (widget.modalKey == ModalKey.mileageSet) {
-              context.read<CarInfoVM>().setMilege(number);
+              context.read<CarInfoVM>().setMilege(number.toInt());
             } else if (widget.modalKey == ModalKey.maintenanceAdd) {
+              context
+                  .read<MaintenanceArticleVM>()
+                  .addArticle(number.toInt(), selectedDate);
             } else if (widget.modalKey == ModalKey.maintenanceMile) {
-            } else if (widget.modalKey == ModalKey.maintenanceCycle) {}
+              context.read<MaintenanceArticleVM>().setMileage(number.toInt());
+            } else if (widget.modalKey == ModalKey.maintenanceCycle) {
+              context.read<MaintenanceArticleVM>().setCycle(number.toInt());
+            }
 
             Navigator.of(context).pop(); // Close the modal
           },

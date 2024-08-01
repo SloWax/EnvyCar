@@ -87,7 +87,7 @@ class Maintenance {
 }
 
 class MaintenanceHistory {
-  DateTime date = DateTime.now();
+  DateTime date;
   int mileage;
 
   MaintenanceHistory(this.date, this.mileage);

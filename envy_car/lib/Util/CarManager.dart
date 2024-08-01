@@ -1,17 +1,14 @@
 import 'dart:convert';
 import 'package:envy_car/Presentation/Model/CarModel.dart';
-import 'package:envy_car/Presentation/Model/Enum.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CarManager {
   // 정적 변수로 싱글톤 인스턴스를 저장
   static final CarManager _instance = CarManager._internal();
 
-  User _user = User('', []);
+  User _user = User('test', []);
   User get user => _user;
-
-  Car _car = Car('', Fuel.gasoline, DateTime.now(), 0, []);
-  Car get car => _car;
+  Car get car => _user.carList.first;
 
   // 팩토리 생성자는 기존 인스턴스를 반환
   factory CarManager() {
@@ -22,63 +19,53 @@ class CarManager {
   CarManager._internal();
 
   // 싱글톤 클래스의 메서드와 속성을 여기에 정의
-  void init() async {
+  // void init() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final userJson = prefs.getString("user");
+
+  //   if (userJson != null) {
+  //     final decode = jsonDecode(userJson);
+  //     _user = User.fromJson(decode);
+  //   }
+  // }
+
+  void addCar(Car value) async {
     final prefs = await SharedPreferences.getInstance();
     final userJson = prefs.getString("user");
 
     if (userJson != null) {
       final decode = jsonDecode(userJson);
       _user = User.fromJson(decode);
-      _car = _user.carList.first;
     }
+
+    _user.carList.insert(0, value);
+
+    _updateUser();
   }
 
-  void setCar(Car value) {
-    _car = value;
+  void updateCar(Car value) {
+    _user.carList[0] = value;
 
-    _saveUser();
+    _updateUser();
   }
 
   void changeCar(Car value, int index) {
-    _car = value;
-
-    user.carList.removeAt(index);
-    user.carList.insert(0, value);
+    _user.carList.removeAt(index);
+    _user.carList.insert(0, value);
 
     _updateUser();
   }
 
   void deleteCar() {
-    user.carList.removeAt(0);
-    _car = user.carList.first;
+    _user.carList.removeAt(0);
 
     _updateUser();
-  }
-
-  void _saveUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString("user");
-
-    User user;
-
-    if (userJson != null) {
-      final decode = jsonDecode(userJson);
-      user = User.fromJson(decode);
-      user.carList.insert(0, _car);
-    } else {
-      user = User('user', [_car]);
-    }
-
-    _user = user;
-
-    final encode = jsonEncode(user);
-    await prefs.setString("user", encode);
   }
 
   void _updateUser() async {
     final prefs = await SharedPreferences.getInstance();
 
-    final encode = jsonEncode(user);
+    final encode = jsonEncode(_user);
     await prefs.setString("user", encode);
   }
 }

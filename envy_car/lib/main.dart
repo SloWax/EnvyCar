@@ -2,6 +2,7 @@ import 'package:envy_car/Presentation/Car/AddCar/AddCarVM.dart';
 import 'package:envy_car/Presentation/Car/AddCar/AddCarView.dart';
 import 'package:envy_car/Presentation/Car/CarInfo/CarInfoVM.dart';
 import 'package:envy_car/Presentation/Car/CarInfo/CarInfoView.dart';
+import 'package:envy_car/Presentation/Car/MaintenanceArticle/MaintenanceArticleVM.dart';
 import 'package:envy_car/Presentation/Login/LoginView.dart';
 import 'package:envy_car/Presentation/Car/MaintenanceArticle/MaintenanceArticleView.dart';
 import 'package:envy_car/Util/CarManager.dart';
@@ -13,7 +14,7 @@ void main() {
     providers: [
       ChangeNotifierProvider(create: (context) => AddCarVM()),
       ChangeNotifierProvider(create: (context) => CarInfoVM()),
-      // ChangeNotifierProvider(create: (context) => TodoModel()),
+      ChangeNotifierProvider(create: (context) => MaintenanceArticleVM()),
     ],
     child: const MyApp(),
   ));

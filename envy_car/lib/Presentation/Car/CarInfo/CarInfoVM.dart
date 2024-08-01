@@ -74,12 +74,11 @@ class CarInfoVM with ChangeNotifier {
     notifyListeners();
   }
 
-  void setMilege(String value) {
-    var mileage = int.tryParse(value) ?? 0;
+  void setMilege(int value) {
     var car = manager.car;
+    car.mileage = value;
 
-    car.mileage = mileage;
-    manager.setCar(car);
+    manager.updateCar(car);
 
     notifyListeners();
   }
@@ -88,7 +87,7 @@ class CarInfoVM with ChangeNotifier {
     var car = manager.car;
 
     car.manageDate = value;
-    manager.setCar(car);
+    manager.updateCar(car);
 
     notifyListeners();
   }

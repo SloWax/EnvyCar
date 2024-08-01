@@ -42,7 +42,7 @@ class AddCarVM with ChangeNotifier {
     Car car = Car(carName, fuel, startDate, mileage, list);
 
     var manager = CarManager();
-    manager.setCar(car);
+    manager.addCar(car);
   }
 
   void updateCarName(String value) {
@@ -68,10 +68,9 @@ class AddCarVM with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateMileage(String value) {
-    mileage = int.tryParse(value) ?? 0;
-
-    mileageBtnText = '${mileage.toNumberFormat()}km';
+  void updateMileage(int value) {
+    mileage = value;
+    mileageBtnText = '${value.toNumberFormat()}km';
 
     notifyListeners();
   }

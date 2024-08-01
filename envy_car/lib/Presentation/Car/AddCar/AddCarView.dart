@@ -21,14 +21,6 @@ class AddCarView extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('차량 등록'),
-        // actions: [
-        //   Visibility(
-        //       visible: true,
-        //       child: IconButton(
-        //         onPressed: () {},
-        //         icon: const Icon(Icons.close),
-        //       ))
-        // ],
       ),
       body: SafeArea(
           child: Column(

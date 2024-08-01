@@ -1,5 +1,6 @@
 import 'package:envy_car/Extension/Extension+int.dart';
 import 'package:envy_car/Presentation/Car/CarInfo/CarInfoVM.dart';
+import 'package:envy_car/Presentation/Car/MaintenanceArticle/MaintenanceArticleVM.dart';
 import 'package:envy_car/Presentation/Car/MaintenanceArticle/MaintenanceArticleView.dart';
 import 'package:envy_car/Presentation/Custom/MaintenanceListTile.dart';
 import 'package:envy_car/Presentation/Custom/PopUpMenu.dart';
@@ -18,36 +19,13 @@ class CarInfoView extends StatefulWidget {
 
 class _CarInfoViewState extends State<CarInfoView> {
   late CarManager manager;
-  late List<GlobalKey> _listTileKeys;
-  double? _listTileHeight;
   final ScrollController _scrollController = ScrollController();
-
-  void _getListTileHeight() {
-    final renderBox = _listTileKeys.first.currentContext?.findRenderObject();
-
-    if (renderBox is RenderBox) {
-      final height = renderBox.size.height;
-      setState(() {
-        _listTileHeight = height;
-      });
-    }
-  }
 
   @override
   void initState() {
     super.initState();
 
     manager = CarManager();
-
-    // manager의 변수를 참조하여 _listTileKeys를 초기화
-    _listTileKeys = List.generate(
-      manager.car.maintenanceList.length,
-      (index) => GlobalKey(),
-    );
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getListTileHeight();
-    });
   }
 
   @override
@@ -192,16 +170,15 @@ class _CarInfoViewState extends State<CarInfoView> {
                     ],
                   )),
               const SizedBox(height: 10),
-              SizedBox(
-                height: (_listTileHeight ?? 0) * list.length, // 리스트뷰의 높이를 지정
-                child: ListView.builder(
+              Consumer<MaintenanceArticleVM>(
+                  builder: (context, itemList, child) {
+                return ListView.builder(
                   shrinkWrap: true, // 스크롤 뷰와 충돌하지 않도록
                   physics:
                       const NeverScrollableScrollPhysics(), // 리스트뷰 자체의 스크롤 비활성화
                   itemCount: list.length,
                   itemBuilder: (context, index) {
                     return MaintenanceListTile(
-                      key: _listTileKeys[index],
                       data: list[index],
                       mileage: mileage,
                       manageDate: manager.car.manageDate,
@@ -210,12 +187,12 @@ class _CarInfoViewState extends State<CarInfoView> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    MaintenanceArticleView(data: list[index])));
+                                    MaintenanceArticleView(dataIndex: index)));
                       },
                     );
                   },
-                ),
-              ),
+                );
+              }),
               Visibility(
                 visible: manager.user.carList.length > 1,
                 child: TextButton(
