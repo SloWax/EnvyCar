@@ -16,13 +16,9 @@ class MaintenanceArticleView extends StatefulWidget {
 }
 
 class _MaintenanceArticleViewState extends State<MaintenanceArticleView> {
-  late CarManager manager;
-
   @override
   void initState() {
     super.initState();
-
-    manager = CarManager();
 
     Provider.of<MaintenanceArticleVM>(context, listen: false)
         .setIndex(widget.dataIndex);
@@ -30,7 +26,7 @@ class _MaintenanceArticleViewState extends State<MaintenanceArticleView> {
 
   @override
   Widget build(BuildContext context) {
-    final maintenance = manager.car.maintenanceList[widget.dataIndex];
+    final maintenance = CarManager().car.maintenanceList[widget.dataIndex];
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -133,12 +129,15 @@ class _MaintenanceArticleViewState extends State<MaintenanceArticleView> {
             ),
             const SizedBox(height: 10),
             Consumer<MaintenanceArticleVM>(
-              builder: (context, itemList, child) {
+              builder: (context, vm, child) {
                 return ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: manager
-                      .car.maintenanceList[widget.dataIndex].history.length,
+                  itemCount: CarManager()
+                      .car
+                      .maintenanceList[widget.dataIndex]
+                      .history
+                      .length,
                   itemBuilder: (context, index) {
                     final date = DateFormat('yyyy-MM-dd')
                         .format(maintenance.history[index].date);

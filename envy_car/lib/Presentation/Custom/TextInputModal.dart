@@ -1,7 +1,6 @@
 import 'package:envy_car/Presentation/Car/AddCar/AddCarVM.dart';
 import 'package:envy_car/Presentation/Car/CarInfo/CarInfoVM.dart';
 import 'package:envy_car/Presentation/Car/MaintenanceArticle/MaintenanceArticleVM.dart';
-import 'package:envy_car/Presentation/Car/MaintenanceArticle/MaintenanceArticleView.dart';
 import 'package:envy_car/Presentation/Model/Enum.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

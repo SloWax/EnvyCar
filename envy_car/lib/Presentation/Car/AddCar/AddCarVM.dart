@@ -22,27 +22,28 @@ class AddCarVM with ChangeNotifier {
       (carName, fuel, startDate, mileage);
 
   makeCar() {
-    List<Maintenance> list = [];
+    List<Maintenance> list = [
+      Maintenance('에어컨 필터', 15000, 12, []),
+      Maintenance('미션오일', 60000, 0, []),
+      Maintenance('배터리', 0, 60, []),
+      Maintenance('브레이크 패드', 70000, 0, []),
+      Maintenance('브레이크 오일', 50000, 0, []),
+      Maintenance('구동벨트', 100000, 0, []),
+      Maintenance('냉각수', 200000, 120, []),
+      Maintenance('타이밍 벨트', 200000, 0, [])
+    ];
 
     if (fuel == Fuel.gasoline) {
-      list = [
-        Maintenance('엔진오일', 10000, 12, []),
-        Maintenance('에어컨 필터', 15000, 12, []),
-        Maintenance('미션오일', 60000, 12, []),
-        Maintenance('배터리', 0, 60, []),
-        Maintenance('브레이크 패드', 70000, 0, []),
-        Maintenance('브레이크 오일', 50000, 0, []),
-        Maintenance('구동벨트', 100000, 0, []),
-        Maintenance('점화 플러그', 100000, 0, []),
-        Maintenance('냉각수', 200000, 120, []),
-        Maintenance('타이밍 벨트', 200000, 0, [])
-      ];
-    } else {}
+      list.insert(0, Maintenance('엔진오일', 10000, 12, []));
+      list.insert(7, Maintenance('점화 플러그', 100000, 0, []));
+    } else {
+      list.insert(0, Maintenance('엔진오일', 15000, 12, []));
+      list.insert(7, Maintenance('인젝터 동와셔', 50000, 0, []));
+    }
 
     Car car = Car(carName, fuel, startDate, mileage, list);
 
-    var manager = CarManager();
-    manager.addCar(car);
+    CarManager().addCar(car);
   }
 
   void updateCarName(String value) {

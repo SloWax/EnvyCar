@@ -11,8 +11,10 @@ class AddCarView extends StatelessWidget {
   void pushNext(BuildContext context) {
     context.read<AddCarVM>().makeCar();
 
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const CarInfoView()));
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const CarInfoView()),
+        (Route<dynamic> route) => false);
   }
 
   @override

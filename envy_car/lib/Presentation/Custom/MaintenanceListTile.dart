@@ -18,7 +18,7 @@ class MaintenanceListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = data.name;
-    final startMile = data.history.isEmpty ? 0 : data.history.last.mileage;
+    final startMile = data.history.isEmpty ? 0 : data.history.first.mileage;
     final nowMile = mileage;
     final endMile = startMile + data.maintenanceMile;
     final startDate =
@@ -26,9 +26,10 @@ class MaintenanceListTile extends StatelessWidget {
     final nowDate = DateTime.now().difference(startDate).inDays ~/ 30;
     final endDate = data.maintenanceCycle;
 
-    String subtitle;
+    String subtitle, progressStart, progressEnd;
     int start, end, remainingMile, remainingDate;
     double progress;
+    bool isOver;
 
     if (data.maintenanceMile != 0) {
       start = startMile;
@@ -36,9 +37,12 @@ class MaintenanceListTile extends StatelessWidget {
       remainingMile = endMile - nowMile;
       remainingDate = endDate - nowDate;
 
-      bool isOver = data.maintenanceCycle != 0 &&
-          (remainingMile <= 0 || remainingDate <= 0);
-      progress = isOver ? 1.0 : nowMile / (endMile - startMile);
+      if (data.maintenanceCycle != 0) {
+        isOver = (remainingMile <= 0 || remainingDate <= 0);
+      } else {
+        isOver = remainingMile <= 0;
+      }
+      progress = isOver ? 1.0 : (nowMile - startMile) / (endMile - startMile);
 
       if (remainingMile <= 0) {
         subtitle = '${remainingMile.toNumberFormat()}km 지남';
@@ -49,6 +53,9 @@ class MaintenanceListTile extends StatelessWidget {
       } else {
         subtitle = '${remainingMile.toNumberFormat()}km 남음';
       }
+
+      progressStart = '${start.toNumberFormat()}km';
+      progressEnd = '${end.toNumberFormat()}km';
     } else {
       start = 0;
       end = data.maintenanceCycle;
@@ -58,6 +65,8 @@ class MaintenanceListTile extends StatelessWidget {
           ? '${remainingDate * -1}개월 지남'
           : '$remainingDate개월 남음';
       progress = remainingDate <= 0 ? 1.0 : nowDate / endDate;
+      progressStart = '${start.toNumberFormat()}개월';
+      progressEnd = '${end.toNumberFormat()}개월';
     }
 
     return InkWell(
@@ -83,10 +92,8 @@ class MaintenanceListTile extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('${start.toNumberFormat()}km',
-                          style: const TextStyle(fontSize: 12)),
-                      Text('${end.toNumberFormat()}km',
-                          style: const TextStyle(fontSize: 12))
+                      Text(progressStart, style: const TextStyle(fontSize: 12)),
+                      Text(progressEnd, style: const TextStyle(fontSize: 12))
                     ],
                   ))
             ],

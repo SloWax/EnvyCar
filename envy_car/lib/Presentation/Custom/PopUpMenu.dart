@@ -14,8 +14,7 @@ class PopupMenuWidget extends StatelessWidget {
       itemBuilder: (BuildContext context) {
         List<PopupMenuEntry<String>> buttons = [];
 
-        final manager = CarManager();
-        final user = manager.user;
+        final user = CarManager().user;
 
         if (user.carList.length > 1) {
           for (final value in user.carList) {
@@ -34,8 +33,7 @@ class PopupMenuWidget extends StatelessWidget {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const AddCarView()));
         } else {
-          var manager = CarManager();
-          var list = manager.user.carList;
+          var list = CarManager().user.carList;
           int index = list.indexWhere((car) => car.carName == value);
 
           context.read<CarInfoVM>().changeCar(list[index], index);

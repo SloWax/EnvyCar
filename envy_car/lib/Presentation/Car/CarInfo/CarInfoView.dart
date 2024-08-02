@@ -8,6 +8,7 @@ import 'package:envy_car/Presentation/Custom/TextInputModal.dart';
 import 'package:envy_car/Presentation/Model/Enum.dart';
 import 'package:envy_car/Util/CarManager.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CarInfoView extends StatefulWidget {
@@ -18,32 +19,19 @@ class CarInfoView extends StatefulWidget {
 }
 
 class _CarInfoViewState extends State<CarInfoView> {
-  late CarManager manager;
   final ScrollController _scrollController = ScrollController();
 
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
 
-    manager = CarManager();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (!context.read<CarInfoVM>().isWeatherLoad) {
-      Provider.of<CarInfoVM>(context, listen: true).getCurrentLocation();
-    }
-  }
+  //   if (!context.read<CarInfoVM>().isWeatherLoad) {
+  //     Provider.of<CarInfoVM>(context, listen: true).getCurrentLocation();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
-    Duration difference = DateTime.now().difference(manager.car.manageDate);
-    final mileage = manager.car.mileage;
-    final date = difference.inDays;
-    final list = manager.car.maintenanceList;
-
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -69,50 +57,63 @@ class _CarInfoViewState extends State<CarInfoView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(manager.car.carName,
-                                style: const TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.bold)),
+                            Consumer<CarInfoVM>(builder: (context, vm, child) {
+                              return Text(CarManager().car.carName,
+                                  style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold));
+                            }),
                             const SizedBox(height: 10),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: '유종 ',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  TextSpan(
-                                    text: manager.car.fuel == Fuel.gasoline
-                                        ? '휘발유'
-                                        : '경유',
-                                    style: TextStyle(
-                                        color: Colors.yellow.shade700,
-                                        fontSize: 18),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            Consumer<CarInfoVM>(builder: (context, vm, child) {
+                              return RichText(
+                                text: TextSpan(
+                                  children: [
+                                    const TextSpan(
+                                      text: '유종 ',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          CarManager().car.fuel == Fuel.gasoline
+                                              ? '휘발유'
+                                              : '경유',
+                                      style: TextStyle(
+                                          color: CarManager().car.fuel ==
+                                                  Fuel.gasoline
+                                              ? Colors.yellow.shade700
+                                              : Colors.green.shade900,
+                                          fontSize: 18),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
                             const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                if (context.read<CarInfoVM>().isWeatherLoad)
-                                  Consumer<CarInfoVM>(
-                                      builder: (context, value, child) {
-                                    return Text(
-                                      value.carwashMessage,
-                                      style: const TextStyle(fontSize: 18),
-                                    );
-                                  }),
+                                // if (context.read<CarInfoVM>().isWeatherLoad)
+                                // Consumer<CarInfoVM>(
+                                //     builder: (context, vm, child) {
+                                //   return
+                                Image.asset(
+                                  'assets/WeatherIcon/${CarManager().result.icon}@2x.png', // 이미지 경로
+                                  height: 24, // 텍스트 높이에 맞춘 이미지 높이
+                                  width: 24, // 이미지의 너비도 높이와 같게 설정
+                                ),
+                                // ;
+                                // }),
                                 const SizedBox(width: 10),
-                                if (context.read<CarInfoVM>().isWeatherLoad)
-                                  Consumer<CarInfoVM>(
-                                      builder: (context, value, child) {
-                                    return Image.asset(
-                                      'assets/WeatherIcon/${value.result.icon}@2x.png', // 이미지 경로
-                                      height: 24, // 텍스트 높이에 맞춘 이미지 높이
-                                      width: 24, // 이미지의 너비도 높이와 같게 설정
-                                    );
-                                  }),
+                                // if (context.read<CarInfoVM>().isWeatherLoad)
+                                // Consumer<CarInfoVM>(
+                                //     builder: (context, vm, child) {
+                                //   return
+                                Text(
+                                  CarManager().carwashMessage,
+                                  style: const TextStyle(fontSize: 18),
+                                )
+                                // ;
+                                // }),
                               ],
                             )
                           ],
@@ -128,73 +129,85 @@ class _CarInfoViewState extends State<CarInfoView> {
                           ),
                           child: Row(
                             children: [
-                              TextButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return const TextInputModal(
-                                            modalKey: ModalKey.mileageSet,
-                                            title: '정비 내역',
-                                            decoration: 'km',
-                                            isHiddenDate: true);
-                                      },
-                                    );
-                                  },
-                                  child: Text(
-                                      '누적 주행거리 +\n${mileage.toNumberFormat()}km',
-                                      style: const TextStyle(
-                                          fontSize: 18, color: Colors.white))),
+                              Consumer<CarInfoVM>(
+                                  builder: (context, vm, child) {
+                                return TextButton(
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return const TextInputModal(
+                                              modalKey: ModalKey.mileageSet,
+                                              title: '정비 내역',
+                                              decoration: 'km',
+                                              isHiddenDate: true);
+                                        },
+                                      );
+                                    },
+                                    child: Text(
+                                        '누적 주행거리 +\n${CarManager().car.mileage.toNumberFormat()}km',
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.white)));
+                              }),
                               const Spacer(),
-                              TextButton(
-                                  onPressed: () async {
-                                    DateTime? selectedDate =
-                                        await showDatePicker(
-                                      context: context,
-                                      initialDate: manager.car.manageDate,
-                                      firstDate: DateTime(1900),
-                                      lastDate: DateTime(2101),
-                                    );
-                                    if (selectedDate != null) {
-                                      context
-                                          .read<CarInfoVM>()
-                                          .setDate(selectedDate);
-                                    }
-                                  },
-                                  child: Text('22.01.07 >\n$date일째 관리중',
-                                      style: const TextStyle(
-                                          fontSize: 18, color: Colors.white))),
+                              Consumer<CarInfoVM>(
+                                  builder: (context, vm, child) {
+                                return TextButton(
+                                    onPressed: () async {
+                                      DateTime? selectedDate =
+                                          await showDatePicker(
+                                        context: context,
+                                        initialDate:
+                                            CarManager().car.manageDate,
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime(2101),
+                                      );
+                                      if (selectedDate != null) {
+                                        context
+                                            .read<CarInfoVM>()
+                                            .setDate(selectedDate);
+                                      }
+                                    },
+                                    child: Text(
+                                        '${DateFormat('yy.MM.dd').format(CarManager().car.manageDate)} >\n${DateTime.now().difference(CarManager().car.manageDate).inDays}일째 관리중',
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.white)));
+                              }),
                               const Spacer()
                             ],
                           ))
                     ],
                   )),
               const SizedBox(height: 10),
-              Consumer<MaintenanceArticleVM>(
-                  builder: (context, itemList, child) {
-                return ListView.builder(
-                  shrinkWrap: true, // 스크롤 뷰와 충돌하지 않도록
-                  physics:
-                      const NeverScrollableScrollPhysics(), // 리스트뷰 자체의 스크롤 비활성화
-                  itemCount: list.length,
-                  itemBuilder: (context, index) {
-                    return MaintenanceListTile(
-                      data: list[index],
-                      mileage: mileage,
-                      manageDate: manager.car.manageDate,
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    MaintenanceArticleView(dataIndex: index)));
-                      },
-                    );
-                  },
-                );
+              Consumer<CarInfoVM>(builder: (context, vm, child) {
+                return Consumer<MaintenanceArticleVM>(
+                    builder: (context, articleVM, child) {
+                  return ListView.builder(
+                    shrinkWrap: true, // 스크롤 뷰와 충돌하지 않도록
+                    physics:
+                        const NeverScrollableScrollPhysics(), // 리스트뷰 자체의 스크롤 비활성화
+                    itemCount: CarManager().car.maintenanceList.length,
+                    itemBuilder: (context, index) {
+                      return MaintenanceListTile(
+                        data: CarManager().car.maintenanceList[index],
+                        mileage: CarManager().car.mileage,
+                        manageDate: CarManager().car.manageDate,
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MaintenanceArticleView(
+                                      dataIndex: index)));
+                        },
+                      );
+                    },
+                  );
+                });
               }),
               Visibility(
-                visible: manager.user.carList.length > 1,
+                visible: CarManager().user.carList.length > 1,
                 child: TextButton(
                     onPressed: () {
                       showDialog(
@@ -203,7 +216,8 @@ class _CarInfoViewState extends State<CarInfoView> {
                           return AlertDialog(
                             title: const Text('차량 삭제',
                                 style: TextStyle(fontSize: 24)),
-                            content: Text('${manager.car.carName}\n차량을 삭제할까요?',
+                            content: Text(
+                                '${CarManager().car.carName}\n차량을 삭제할까요?',
                                 style: const TextStyle(fontSize: 18)),
                             actions: <Widget>[
                               TextButton(

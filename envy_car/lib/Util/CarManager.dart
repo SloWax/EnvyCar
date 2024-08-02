@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:envy_car/Presentation/Model/CarModel.dart';
+import 'package:envy_car/Presentation/Model/WeatherModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CarManager {
@@ -10,6 +11,9 @@ class CarManager {
   User get user => _user;
   Car get car => _user.carList.first;
 
+  Weather result = Weather(0.0, 0.0, 0, '', '', 0.0);
+  String carwashMessage = "";
+
   // 팩토리 생성자는 기존 인스턴스를 반환
   factory CarManager() {
     return _instance;
@@ -18,16 +22,17 @@ class CarManager {
   // private 생성자로 내부에서만 호출 가능
   CarManager._internal();
 
-  // 싱글톤 클래스의 메서드와 속성을 여기에 정의
-  // void init() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final userJson = prefs.getString("user");
+  Future<String?> loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userJson = prefs.getString("user");
 
-  //   if (userJson != null) {
-  //     final decode = jsonDecode(userJson);
-  //     _user = User.fromJson(decode);
-  //   }
-  // }
+    if (userJson != null) {
+      final decode = jsonDecode(userJson);
+      _user = User.fromJson(decode);
+    }
+
+    return userJson;
+  }
 
   void addCar(Car value) async {
     final prefs = await SharedPreferences.getInstance();
