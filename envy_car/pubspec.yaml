@@ -37,6 +37,8 @@ dependencies:
   flutter_keyboard_listener:
   shared_preferences:
   lottie:
+  sign_in_with_apple:
+  google_sign_in:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

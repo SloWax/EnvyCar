@@ -21,15 +21,6 @@ class CarInfoView extends StatefulWidget {
 class _CarInfoViewState extends State<CarInfoView> {
   final ScrollController _scrollController = ScrollController();
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-
-  //   if (!context.read<CarInfoVM>().isWeatherLoad) {
-  //     Provider.of<CarInfoVM>(context, listen: true).getCurrentLocation();
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,28 +83,16 @@ class _CarInfoViewState extends State<CarInfoView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                // if (context.read<CarInfoVM>().isWeatherLoad)
-                                // Consumer<CarInfoVM>(
-                                //     builder: (context, vm, child) {
-                                //   return
                                 Image.asset(
                                   'assets/WeatherIcon/${CarManager().result.icon}@2x.png', // 이미지 경로
                                   height: 24, // 텍스트 높이에 맞춘 이미지 높이
                                   width: 24, // 이미지의 너비도 높이와 같게 설정
                                 ),
-                                // ;
-                                // }),
                                 const SizedBox(width: 10),
-                                // if (context.read<CarInfoVM>().isWeatherLoad)
-                                // Consumer<CarInfoVM>(
-                                //     builder: (context, vm, child) {
-                                //   return
                                 Text(
                                   CarManager().carwashMessage,
                                   style: const TextStyle(fontSize: 18),
                                 )
-                                // ;
-                                // }),
                               ],
                             )
                           ],

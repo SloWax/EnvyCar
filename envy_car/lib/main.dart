@@ -5,6 +5,7 @@ import 'package:envy_car/Presentation/Car/CarInfo/CarInfoView.dart';
 import 'package:envy_car/Presentation/Car/Intro/IntroVM.dart';
 import 'package:envy_car/Presentation/Car/Intro/IntroView.dart';
 import 'package:envy_car/Presentation/Car/MaintenanceArticle/MaintenanceArticleVM.dart';
+import 'package:envy_car/Presentation/Login/LoginVM.dart';
 import 'package:envy_car/Presentation/Login/LoginView.dart';
 import 'package:envy_car/Presentation/Car/MaintenanceArticle/MaintenanceArticleView.dart';
 import 'package:envy_car/Util/CarManager.dart';
@@ -15,6 +16,7 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => IntroVM()),
+      ChangeNotifierProvider(create: (context) => LoginVM()),
       ChangeNotifierProvider(create: (context) => AddCarVM()),
       ChangeNotifierProvider(create: (context) => CarInfoVM()),
       ChangeNotifierProvider(create: (context) => MaintenanceArticleVM()),

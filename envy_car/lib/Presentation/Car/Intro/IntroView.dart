@@ -44,8 +44,8 @@ class _IntroViewState extends State<IntroView>
     _controller.stop();
 
     // 다음 화면으로 이동
-    if (user != null) {
-      // if (user == null) {
+    // if (user != null) {
+    if (user == null) {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const CarInfoView()));
     } else {

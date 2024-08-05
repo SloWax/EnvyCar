@@ -1,5 +1,7 @@
 import 'package:envy_car/Presentation/Car/AddCar/AddCarView.dart';
+import 'package:envy_car/Presentation/Login/LoginVM.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -33,6 +35,7 @@ class LoginView extends StatelessWidget {
                   child: const Text('apple', style: TextStyle(fontSize: 24)),
                   onPressed: () {
                     print('apple');
+                    context.read<LoginVM>().signInWithApple();
                   }),
             ),
             const SizedBox(height: 10),
@@ -42,6 +45,7 @@ class LoginView extends StatelessWidget {
                     child: const Text('google', style: TextStyle(fontSize: 24)),
                     onPressed: () {
                       print('google');
+                      context.read<LoginVM>().signInWithGoogle();
                     })),
             const SizedBox(height: 15),
           ]))),
