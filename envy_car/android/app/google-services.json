@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "704859787547",
+    "project_id": "envycar-57c04",
+    "storage_bucket": "envycar-57c04.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704859787547:android:d758e244ef111d9a0403be",
+        "android_client_info": {
+          "package_name": "com.example.envyCar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "704859787547-vjcg9fstbudau357bjqhejpohghkuc5b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXILAlHD7g28JAZyQK7BPoK4V1dYFrQjM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "704859787547-vjcg9fstbudau357bjqhejpohghkuc5b.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "704859787547-6kaifl1lkjt9m6nsf1m5no89k634ncl7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.envyCar"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -27,26 +27,68 @@ class LoginView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
             const Spacer(),
-            const Text('Login', textAlign: TextAlign.center),
+            Image.asset(
+              'assets/icon.png',
+              width: 100, // 이미지 가로 크기
+              height: 100,
+            ),
             const Spacer(),
             Container(
               margin: const EdgeInsets.only(left: 10.0, right: 10.0),
               child: ElevatedButton(
-                  child: const Text('apple', style: TextStyle(fontSize: 24)),
                   onPressed: () {
-                    print('apple');
                     context.read<LoginVM>().signInWithApple();
-                  }),
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      )),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/alogo.png',
+                        width: 35,
+                        height: 35,
+                      ),
+                      const SizedBox(width: 10),
+                      const Text(
+                        'Apple로 로그인',
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      )
+                    ],
+                  )),
             ),
             const SizedBox(height: 10),
             Container(
                 margin: const EdgeInsets.only(left: 10.0, right: 10.0),
                 child: ElevatedButton(
-                    child: const Text('google', style: TextStyle(fontSize: 24)),
                     onPressed: () {
-                      print('google');
                       context.read<LoginVM>().signInWithGoogle();
-                    })),
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ) // 배경색 설정
+                        ),
+                    child: Row(
+                      //spaceEvenly: 요소들을 균등하게 배치하는 속성
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/glogo.png',
+                          width: 15, // 이미지 가로 크기
+                          height: 15,
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
+                          'Google로 로그인',
+                          style: TextStyle(color: Colors.black, fontSize: 18),
+                        )
+                      ],
+                    ))),
             const SizedBox(height: 15),
           ]))),
     );
