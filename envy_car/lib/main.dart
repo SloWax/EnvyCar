@@ -9,10 +9,14 @@ import 'package:envy_car/Presentation/Login/LoginVM.dart';
 import 'package:envy_car/Presentation/Login/LoginView.dart';
 import 'package:envy_car/Presentation/Car/MaintenanceArticle/MaintenanceArticleView.dart';
 import 'package:envy_car/Util/CarManager.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => IntroVM()),

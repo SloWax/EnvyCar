@@ -36,15 +36,15 @@ class _IntroViewState extends State<IntroView>
   _loadDataAndNavigate() async {
     _controller = AnimationController(vsync: this);
 
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    // await Firebase.initializeApp(
+    //   options: DefaultFirebaseOptions.currentPlatform,
+    // );
 
     // 필요한 데이터 로드
     String? user = await CarManager().loadUser();
 
     // 위치 정보 받아오기
-    Provider.of<IntroVM>(context, listen: false).getCurrentLocation();
+    await Provider.of<IntroVM>(context, listen: false).getCurrentLocation();
 
     // 스플래시 화면을 2초 동안 보여주기
     await Future.delayed(const Duration(seconds: 3));
@@ -53,7 +53,6 @@ class _IntroViewState extends State<IntroView>
 
     // 다음 화면으로 이동
     if (user != null) {
-      // if (user == null) {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const CarInfoView()));
     } else {

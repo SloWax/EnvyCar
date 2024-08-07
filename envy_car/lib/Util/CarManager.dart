@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:envy_car/Presentation/Model/CarModel.dart';
 import 'package:envy_car/Presentation/Model/WeatherModel.dart';
+// import 'package:firebase_database/firebase_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CarManager {
@@ -72,5 +74,32 @@ class CarManager {
 
     final encode = jsonEncode(_user);
     await prefs.setString("user", encode);
+
+    _backupFirebase();
+  }
+
+  Future<void> _backupFirebase() async {
+    // DatabaseReference ref = FirebaseDatabase.instance.ref();
+    // DatabaseReference ref = FirebaseDatabase.instance
+    //     .refFromURL("https://(default).firebaseio.com");
+
+    // await ref.set({
+    //   "name": "John",
+    //   "age": 18,
+    //   "address": {"line1": "100 Mountain View"}
+    // });
+
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Firestore에 데이터 쓰기
+    await firestore
+        .collection('test')
+        .doc('connection')
+        .set({'connected': true});
+
+    print('done!!');
   }
 }
+
+// class FirebaseFirestore {
+// }
