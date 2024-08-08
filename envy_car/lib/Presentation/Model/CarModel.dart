@@ -1,13 +1,13 @@
 import 'package:envy_car/Presentation/Model/Enum.dart';
 
-class User {
+class CarUser {
   String user;
   List<Car> carList;
 
-  User(this.user, this.carList);
+  CarUser(this.user, this.carList);
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory CarUser.fromJson(Map<String, dynamic> json) {
+    return CarUser(
       json['user'],
       (json['carList'] as List).map((item) => Car.fromJson(item)).toList(),
     );

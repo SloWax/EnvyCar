@@ -26,6 +26,18 @@ class _CarInfoViewState extends State<CarInfoView> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
+          leading: IconButton(
+            icon: CarManager().email != 'user'
+                ? const Icon(Icons.cloud_done)
+                : const Icon(Icons.cloud),
+            onPressed: () {
+              if (CarManager().email != 'user') {
+                print('connected');
+              } else {
+                print('not connect');
+              }
+            },
+          ),
           title: const Text('차량 정보'),
           actions: const [PopupMenuWidget()],
         ),
@@ -117,7 +129,7 @@ class _CarInfoViewState extends State<CarInfoView> {
                                         builder: (context) {
                                           return const TextInputModal(
                                               modalKey: ModalKey.mileageSet,
-                                              title: '정비 내역',
+                                              title: '주행거리',
                                               decoration: 'km',
                                               isHiddenDate: true);
                                         },

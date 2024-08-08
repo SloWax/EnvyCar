@@ -2,15 +2,17 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:envy_car/Presentation/Model/CarModel.dart';
 import 'package:envy_car/Presentation/Model/WeatherModel.dart';
-// import 'package:firebase_database/firebase_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CarManager {
   // 정적 변수로 싱글톤 인스턴스를 저장
   static final CarManager _instance = CarManager._internal();
 
-  User _user = User('test', []);
-  User get user => _user;
+  String _email = 'user';
+  CarUser _user = CarUser('user', []);
+
+  String get email => _email;
+  CarUser get user => _user;
   Car get car => _user.carList.first;
 
   Weather result = Weather(0.0, 0.0, 0, '', '', 0.0);
@@ -24,13 +26,21 @@ class CarManager {
   // private 생성자로 내부에서만 호출 가능
   CarManager._internal();
 
-  Future<String?> loadUser() async {
+  void setEmail(String value) {
+    _email = value;
+  }
+
+  void setUser(CarUser value) {
+    _user = value;
+  }
+
+  Future<String?> loadUser(String email) async {
     final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString("user");
+    final userJson = prefs.getString(email);
 
     if (userJson != null) {
       final decode = jsonDecode(userJson);
-      _user = User.fromJson(decode);
+      _user = CarUser.fromJson(decode);
     }
 
     return userJson;
@@ -38,11 +48,11 @@ class CarManager {
 
   void addCar(Car value) async {
     final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString("user");
+    final userJson = prefs.getString(_email);
 
     if (userJson != null) {
       final decode = jsonDecode(userJson);
-      _user = User.fromJson(decode);
+      _user = CarUser.fromJson(decode);
     }
 
     _user.carList.insert(0, value);
@@ -72,34 +82,19 @@ class CarManager {
   void _updateUser() async {
     final prefs = await SharedPreferences.getInstance();
 
-    final encode = jsonEncode(_user);
-    await prefs.setString("user", encode);
+    _user.user = _email;
+    await prefs.setString('email', _email);
 
-    _backupFirebase();
+    final encode = jsonEncode(_user);
+    await prefs.setString(_email, encode);
+
+    _backupFirebase(encode);
   }
 
-  Future<void> _backupFirebase() async {
-    // DatabaseReference ref = FirebaseDatabase.instance.ref();
-    // DatabaseReference ref = FirebaseDatabase.instance
-    //     .refFromURL("https://(default).firebaseio.com");
-
-    // await ref.set({
-    //   "name": "John",
-    //   "age": 18,
-    //   "address": {"line1": "100 Mountain View"}
-    // });
-
+  void _backupFirebase(String value) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     // Firestore에 데이터 쓰기
-    await firestore
-        .collection('test')
-        .doc('connection')
-        .set({'connected': true});
-
-    print('done!!');
+    firestore.collection(_user.user).doc('backup').set({'data': value});
   }
 }
-
-// class FirebaseFirestore {
-// }

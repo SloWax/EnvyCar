@@ -2,12 +2,11 @@ import 'package:envy_car/Presentation/Car/CarInfo/CarInfoView.dart';
 import 'package:envy_car/Presentation/Car/Intro/IntroVM.dart';
 import 'package:envy_car/Presentation/Login/LoginView.dart';
 import 'package:envy_car/Util/CarManager.dart';
-import 'package:envy_car/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroView extends StatefulWidget {
   const IntroView({super.key});
@@ -36,12 +35,10 @@ class _IntroViewState extends State<IntroView>
   _loadDataAndNavigate() async {
     _controller = AnimationController(vsync: this);
 
-    // await Firebase.initializeApp(
-    //   options: DefaultFirebaseOptions.currentPlatform,
-    // );
-
     // 필요한 데이터 로드
-    String? user = await CarManager().loadUser();
+    final prefs = await SharedPreferences.getInstance();
+    final userEmail = prefs.getString("email") ?? "";
+    String? user = await CarManager().loadUser(userEmail);
 
     // 위치 정보 받아오기
     await Provider.of<IntroVM>(context, listen: false).getCurrentLocation();

@@ -1,5 +1,7 @@
 import 'package:envy_car/Presentation/Car/AddCar/AddCarView.dart';
+import 'package:envy_car/Presentation/Car/CarInfo/CarInfoView.dart';
 import 'package:envy_car/Presentation/Login/LoginVM.dart';
+import 'package:envy_car/Util/CarManager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -64,8 +66,21 @@ class LoginView extends StatelessWidget {
             Container(
                 margin: const EdgeInsets.only(left: 10.0, right: 10.0),
                 child: ElevatedButton(
-                    onPressed: () {
-                      context.read<LoginVM>().signInWithGoogle();
+                    onPressed: () async {
+                      await context.read<LoginVM>().signInWithGoogle();
+                      await context.read<LoginVM>().roadFirebase();
+
+                      if (CarManager().user.carList.isEmpty) {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AddCarView()));
+                      } else {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const CarInfoView()));
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
