@@ -1,12 +1,7 @@
-import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:envy_car/Presentation/Model/CarModel.dart';
 import 'package:envy_car/Util/CarManager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -85,28 +80,6 @@ class LoginVM with ChangeNotifier {
       }
     } catch (error) {
       print('Google SignIn Error: $error');
-    }
-  }
-
-  Future<void> roadFirebase() async {
-    final email = CarManager().email;
-    final docRef = FirebaseFirestore.instance.collection(email).doc('backup');
-    try {
-      final doc = await docRef.get();
-      if (doc.exists) {
-        final data = doc.data() as Map<String, dynamic>;
-
-        String userJson = data['data'] as String;
-        final decode = jsonDecode(userJson);
-        final user = CarUser.fromJson(decode);
-        CarManager().setUser(user);
-
-        notifyListeners();
-      } else {
-        notifyListeners();
-      }
-    } catch (e) {
-      notifyListeners();
     }
   }
 }

@@ -5,6 +5,7 @@ import 'package:envy_car/Presentation/Car/MaintenanceArticle/MaintenanceArticleV
 import 'package:envy_car/Presentation/Custom/MaintenanceListTile.dart';
 import 'package:envy_car/Presentation/Custom/PopUpMenu.dart';
 import 'package:envy_car/Presentation/Custom/TextInputModal.dart';
+import 'package:envy_car/Presentation/Login/LoginView.dart';
 import 'package:envy_car/Presentation/Model/Enum.dart';
 import 'package:envy_car/Util/CarManager.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,10 @@ class _CarInfoViewState extends State<CarInfoView> {
               if (CarManager().email != 'user') {
                 print('connected');
               } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginView(isFirst: false)));
                 print('not connect');
               }
             },

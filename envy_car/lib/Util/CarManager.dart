@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:envy_car/Presentation/Model/CarModel.dart';
 import 'package:envy_car/Presentation/Model/WeatherModel.dart';
+import 'package:envy_car/Util/FirebaseManager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CarManager {
@@ -34,6 +34,13 @@ class CarManager {
     _user = value;
   }
 
+  Future<String> loadEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    _email = prefs.getString("email") ?? "user";
+
+    return _email;
+  }
+
   Future<String?> loadUser(String email) async {
     final prefs = await SharedPreferences.getInstance();
     final userJson = prefs.getString(email);
@@ -57,29 +64,29 @@ class CarManager {
 
     _user.carList.insert(0, value);
 
-    _updateUser();
+    updateUser();
   }
 
   void updateCar(Car value) {
     _user.carList[0] = value;
 
-    _updateUser();
+    updateUser();
   }
 
   void changeCar(Car value, int index) {
     _user.carList.removeAt(index);
     _user.carList.insert(0, value);
 
-    _updateUser();
+    updateUser();
   }
 
   void deleteCar() {
     _user.carList.removeAt(0);
 
-    _updateUser();
+    updateUser();
   }
 
-  void _updateUser() async {
+  void updateUser() async {
     final prefs = await SharedPreferences.getInstance();
 
     _user.user = _email;
@@ -88,13 +95,8 @@ class CarManager {
     final encode = jsonEncode(_user);
     await prefs.setString(_email, encode);
 
-    _backupFirebase(encode);
-  }
-
-  void _backupFirebase(String value) {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    // Firestore에 데이터 쓰기
-    firestore.collection(_user.user).doc('backup').set({'data': value});
+    if (_email != 'user') {
+      FirebaseManager().backupFirebase(_email, encode);
+    }
   }
 }

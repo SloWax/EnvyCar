@@ -2,25 +2,39 @@ import 'package:envy_car/Presentation/Car/AddCar/AddCarView.dart';
 import 'package:envy_car/Presentation/Car/CarInfo/CarInfoView.dart';
 import 'package:envy_car/Presentation/Login/LoginVM.dart';
 import 'package:envy_car/Util/CarManager.dart';
+import 'package:envy_car/Util/FirebaseManager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+  final bool isFirst;
+
+  const LoginView({super.key, required this.isFirst});
+
+  void pushNext(BuildContext context) {
+    if (CarManager().user.carList.isEmpty && isFirst) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const AddCarView()));
+    } else {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const CarInfoView()));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          TextButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddCarView()),
-                );
-              },
-              child: const Text('로그인 없이 시작'))
+          if (isFirst)
+            TextButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AddCarView()),
+                  );
+                },
+                child: const Text('로그인 없이 시작'))
         ],
       ),
       body: SafeArea(
@@ -31,7 +45,7 @@ class LoginView extends StatelessWidget {
             const Spacer(),
             Image.asset(
               'assets/icon.png',
-              width: 100, // 이미지 가로 크기
+              width: 100,
               height: 100,
             ),
             const Spacer(),
@@ -68,33 +82,29 @@ class LoginView extends StatelessWidget {
                 child: ElevatedButton(
                     onPressed: () async {
                       await context.read<LoginVM>().signInWithGoogle();
-                      await context.read<LoginVM>().roadFirebase();
-
-                      if (CarManager().user.carList.isEmpty) {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AddCarView()));
-                      } else {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CarInfoView()));
+                      switch (isFirst) {
+                        case true:
+                          final email = await CarManager().loadEmail();
+                          await FirebaseManager().roadFirebase(email);
+                          break;
+                        case false:
+                          CarManager().updateUser();
+                          break;
                       }
+
+                      pushNext(context);
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5)),
-                        ) // 배경색 설정
-                        ),
+                        )),
                     child: Row(
-                      //spaceEvenly: 요소들을 균등하게 배치하는 속성
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
                           'assets/glogo.png',
-                          width: 15, // 이미지 가로 크기
+                          width: 15,
                           height: 15,
                         ),
                         const SizedBox(width: 10),

@@ -2,6 +2,7 @@ import 'package:envy_car/Presentation/Car/CarInfo/CarInfoView.dart';
 import 'package:envy_car/Presentation/Car/Intro/IntroVM.dart';
 import 'package:envy_car/Presentation/Login/LoginView.dart';
 import 'package:envy_car/Util/CarManager.dart';
+import 'package:envy_car/Util/FirebaseManager.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:lottie/lottie.dart';
@@ -36,9 +37,18 @@ class _IntroViewState extends State<IntroView>
     _controller = AnimationController(vsync: this);
 
     // 필요한 데이터 로드
-    final prefs = await SharedPreferences.getInstance();
-    final userEmail = prefs.getString("email") ?? "";
-    String? user = await CarManager().loadUser(userEmail);
+    // final prefs = await SharedPreferences.getInstance();
+    // final userEmail = prefs.getString("email") ?? "user";
+    final userEmail = await CarManager().loadEmail();
+    final bool isData;
+
+    if (userEmail == 'user') {
+      final data = await CarManager().loadUser(userEmail);
+      isData = data != null;
+    } else {
+      await FirebaseManager().roadFirebase(userEmail);
+      isData = true;
+    }
 
     // 위치 정보 받아오기
     await Provider.of<IntroVM>(context, listen: false).getCurrentLocation();
@@ -49,12 +59,14 @@ class _IntroViewState extends State<IntroView>
     _controller.stop();
 
     // 다음 화면으로 이동
-    if (user != null) {
+    if (isData) {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const CarInfoView()));
     } else {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const LoginView()));
+          context,
+          MaterialPageRoute(
+              builder: (context) => const LoginView(isFirst: true)));
     }
   }
 
