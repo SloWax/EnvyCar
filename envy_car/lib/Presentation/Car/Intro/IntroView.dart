@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroView extends StatefulWidget {
   const IntroView({super.key});
@@ -37,9 +36,7 @@ class _IntroViewState extends State<IntroView>
     _controller = AnimationController(vsync: this);
 
     // 필요한 데이터 로드
-    // final prefs = await SharedPreferences.getInstance();
-    // final userEmail = prefs.getString("email") ?? "user";
-    final userEmail = await CarManager().loadEmail();
+    final userEmail = await CarManager().loadToken();
     final bool isData;
 
     if (userEmail == 'user') {

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:envy_car/Presentation/Car/AddCar/AddCarView.dart';
 import 'package:envy_car/Presentation/Car/CarInfo/CarInfoView.dart';
 import 'package:envy_car/Presentation/Login/LoginVM.dart';
@@ -11,7 +12,17 @@ class LoginView extends StatelessWidget {
 
   const LoginView({super.key, required this.isFirst});
 
-  void pushNext(BuildContext context) {
+  void pushNext(BuildContext context) async {
+    switch (isFirst) {
+      case true:
+        final email = await CarManager().loadToken();
+        await FirebaseManager().roadFirebase(email);
+        break;
+      case false:
+        CarManager().updateUser();
+        break;
+    }
+
     if (CarManager().user.carList.isEmpty && isFirst) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const AddCarView()));
@@ -25,6 +36,8 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text('로그인'),
+        centerTitle: true,
         actions: [
           if (isFirst)
             TextButton(
@@ -49,49 +62,12 @@ class LoginView extends StatelessWidget {
               height: 100,
             ),
             const Spacer(),
-            Container(
-              margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-              child: ElevatedButton(
-                  onPressed: () {
-                    context.read<LoginVM>().signInWithApple();
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      )),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/alogo.png',
-                        width: 35,
-                        height: 35,
-                      ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        'Apple로 로그인',
-                        style: TextStyle(color: Colors.black, fontSize: 18),
-                      )
-                    ],
-                  )),
-            ),
-            const SizedBox(height: 10),
-            Container(
+            if (Platform.isIOS)
+              Container(
                 margin: const EdgeInsets.only(left: 10.0, right: 10.0),
                 child: ElevatedButton(
                     onPressed: () async {
-                      await context.read<LoginVM>().signInWithGoogle();
-                      switch (isFirst) {
-                        case true:
-                          final email = await CarManager().loadEmail();
-                          await FirebaseManager().roadFirebase(email);
-                          break;
-                        case false:
-                          CarManager().updateUser();
-                          break;
-                      }
-
+                      await context.read<LoginVM>().signInWithApple();
                       pushNext(context);
                     },
                     style: ElevatedButton.styleFrom(
@@ -103,17 +79,46 @@ class LoginView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
-                          'assets/glogo.png',
-                          width: 15,
-                          height: 15,
+                          'assets/alogo.png',
+                          width: 35,
+                          height: 35,
                         ),
                         const SizedBox(width: 10),
                         const Text(
-                          'Google로 로그인',
+                          'Apple로 로그인',
                           style: TextStyle(color: Colors.black, fontSize: 18),
                         )
                       ],
-                    ))),
+                    )),
+              ),
+            if (Platform.isAndroid)
+              Container(
+                  margin: const EdgeInsets.only(left: 10.0, right: 10.0),
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        await context.read<LoginVM>().signInWithGoogle();
+                        pushNext(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          )),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/glogo.png',
+                            width: 15,
+                            height: 15,
+                          ),
+                          const SizedBox(width: 10),
+                          const Text(
+                            'Google로 로그인',
+                            style: TextStyle(color: Colors.black, fontSize: 18),
+                          )
+                        ],
+                      ))),
             const SizedBox(height: 15),
           ]))),
     );

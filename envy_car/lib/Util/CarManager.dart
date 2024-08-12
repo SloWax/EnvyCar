@@ -8,10 +8,10 @@ class CarManager {
   // 정적 변수로 싱글톤 인스턴스를 저장
   static final CarManager _instance = CarManager._internal();
 
-  String _email = 'user';
+  String _token = 'user';
   CarUser _user = CarUser('user', []);
 
-  String get email => _email;
+  String get token => _token;
   CarUser get user => _user;
   Car get car => _user.carList.first;
 
@@ -26,19 +26,22 @@ class CarManager {
   // private 생성자로 내부에서만 호출 가능
   CarManager._internal();
 
-  void setEmail(String value) {
-    _email = value;
+  void setToken(String value) async {
+    _token = value;
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', _token);
   }
 
   void setUser(CarUser value) {
     _user = value;
   }
 
-  Future<String> loadEmail() async {
+  Future<String> loadToken() async {
     final prefs = await SharedPreferences.getInstance();
-    _email = prefs.getString("email") ?? "user";
+    _token = prefs.getString("token") ?? "user";
 
-    return _email;
+    return _token;
   }
 
   Future<String?> loadUser(String email) async {
@@ -55,7 +58,7 @@ class CarManager {
 
   void addCar(Car value) async {
     final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString(_email);
+    final userJson = prefs.getString(_token);
 
     if (userJson != null) {
       final decode = jsonDecode(userJson);
@@ -89,14 +92,14 @@ class CarManager {
   void updateUser() async {
     final prefs = await SharedPreferences.getInstance();
 
-    _user.user = _email;
-    await prefs.setString('email', _email);
+    _user.user = _token;
+    await prefs.setString('token', _token);
 
     final encode = jsonEncode(_user);
-    await prefs.setString(_email, encode);
+    await prefs.setString(_token, encode);
 
-    if (_email != 'user') {
-      FirebaseManager().backupFirebase(_email, encode);
+    if (_token != 'user') {
+      FirebaseManager().backupFirebase(_token, encode);
     }
   }
 }

@@ -28,11 +28,11 @@ class _CarInfoViewState extends State<CarInfoView> {
         appBar: AppBar(
           centerTitle: true,
           leading: IconButton(
-            icon: CarManager().email != 'user'
+            icon: CarManager().token != 'user'
                 ? const Icon(Icons.cloud_done)
                 : const Icon(Icons.cloud),
             onPressed: () {
-              if (CarManager().email != 'user') {
+              if (CarManager().token != 'user') {
                 print('connected');
               } else {
                 Navigator.push(
