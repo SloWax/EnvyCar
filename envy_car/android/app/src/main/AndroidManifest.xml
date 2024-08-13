@@ -3,7 +3,7 @@
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <application
-        android:label="envy_car"
+        android:label="오일갈자"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
