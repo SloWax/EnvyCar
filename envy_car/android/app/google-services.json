@@ -7,12 +7,56 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:704859787547:android:c3c6afedec9cec200403be",
+        "android_client_info": {
+          "package_name": "com.envy.envyCar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "704859787547-vjcg9fstbudau357bjqhejpohghkuc5b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXILAlHD7g28JAZyQK7BPoK4V1dYFrQjM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "704859787547-vjcg9fstbudau357bjqhejpohghkuc5b.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "704859787547-6kaifl1lkjt9m6nsf1m5no89k634ncl7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.envyCar"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:704859787547:android:d758e244ef111d9a0403be",
         "android_client_info": {
           "package_name": "com.example.envyCar"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "704859787547-f15hrv0usq7mg09qlmrv7uc6cphnh5j4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.envyCar",
+            "certificate_hash": "ee44156b64cb8622efd25dd1753bafbaf03d005a"
+          }
+        },
         {
           "client_id": "704859787547-vjcg9fstbudau357bjqhejpohghkuc5b.apps.googleusercontent.com",
           "client_type": 3

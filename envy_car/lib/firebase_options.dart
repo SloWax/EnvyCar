@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -51,7 +42,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDXILAlHD7g28JAZyQK7BPoK4V1dYFrQjM',
-    appId: '1:704859787547:android:d758e244ef111d9a0403be',
+    appId: '1:704859787547:android:c3c6afedec9cec200403be',
     messagingSenderId: '704859787547',
     projectId: 'envycar-57c04',
     storageBucket: 'envycar-57c04.appspot.com',
@@ -59,12 +50,44 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAwpAJoNIAHMYo9Q7FLNgNgR19WJSgIzCg',
+    appId: '1:704859787547:ios:e4017dd9b08d62680403be',
+    messagingSenderId: '704859787547',
+    projectId: 'envycar-57c04',
+    storageBucket: 'envycar-57c04.appspot.com',
+    androidClientId: '704859787547-f15hrv0usq7mg09qlmrv7uc6cphnh5j4.apps.googleusercontent.com',
+    iosClientId: '704859787547-o7g91mp845tijji87ddk1pl4hec456nb.apps.googleusercontent.com',
+    iosBundleId: 'com.envy.envyCar',
+  );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyA_LAWLe-BHrVykH0qxMQKkRWy8I9e0KcQ',
+    appId: '1:704859787547:web:f2977f6477dd47930403be',
+    messagingSenderId: '704859787547',
+    projectId: 'envycar-57c04',
+    authDomain: 'envycar-57c04.firebaseapp.com',
+    storageBucket: 'envycar-57c04.appspot.com',
+    measurementId: 'G-P3GDYBEVKW',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyAwpAJoNIAHMYo9Q7FLNgNgR19WJSgIzCg',
     appId: '1:704859787547:ios:f5ccd5b097c5f5a70403be',
     messagingSenderId: '704859787547',
     projectId: 'envycar-57c04',
     storageBucket: 'envycar-57c04.appspot.com',
-    androidClientId: '704859787547-rl5t6gg6hltte9684gaq3d8qmvcn4fms.apps.googleusercontent.com',
+    androidClientId: '704859787547-f15hrv0usq7mg09qlmrv7uc6cphnh5j4.apps.googleusercontent.com',
     iosClientId: '704859787547-6kaifl1lkjt9m6nsf1m5no89k634ncl7.apps.googleusercontent.com',
     iosBundleId: 'com.example.envyCar',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyA_LAWLe-BHrVykH0qxMQKkRWy8I9e0KcQ',
+    appId: '1:704859787547:web:056c3d33a66bdefd0403be',
+    messagingSenderId: '704859787547',
+    projectId: 'envycar-57c04',
+    authDomain: 'envycar-57c04.firebaseapp.com',
+    storageBucket: 'envycar-57c04.appspot.com',
+    measurementId: 'G-Z5BWTFS80W',
+  );
+
 }

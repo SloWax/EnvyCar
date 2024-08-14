@@ -1,4 +1,4 @@
-package com.example.envyCar
+package com.envy.envyCar
 
 import io.flutter.embedding.android.FlutterActivity
 
