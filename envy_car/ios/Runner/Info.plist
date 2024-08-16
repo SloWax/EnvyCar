@@ -30,9 +30,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>704859787547-6kaifl1lkjt9m6nsf1m5no89k634ncl7.apps.googleusercontent.com</string>
-			</array>
+			<array/>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
