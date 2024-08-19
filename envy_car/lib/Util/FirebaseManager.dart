@@ -16,7 +16,6 @@ class FirebaseManager {
   FirebaseManager._internal();
 
   Future<void> roadFirebase(String email) async {
-    // final email = CarManager().email;
     final docRef = FirebaseFirestore.instance.collection(email).doc('backup');
     try {
       final doc = await docRef.get();

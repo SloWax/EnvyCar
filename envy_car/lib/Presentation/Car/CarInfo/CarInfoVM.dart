@@ -3,6 +3,12 @@ import 'package:envy_car/Util/CarManager.dart';
 import 'package:flutter/material.dart';
 
 class CarInfoVM with ChangeNotifier {
+  void logout() {
+    CarManager().setToken('user');
+
+    notifyListeners();
+  }
+
   void changeCar(Car value, int index) {
     CarManager().changeCar(value, index);
 

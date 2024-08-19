@@ -44,9 +44,9 @@ class CarManager {
     return _token;
   }
 
-  Future<String?> loadUser(String email) async {
+  Future<String?> loadUser(String token) async {
     final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString(email);
+    final userJson = prefs.getString(token);
 
     if (userJson != null) {
       final decode = jsonDecode(userJson);

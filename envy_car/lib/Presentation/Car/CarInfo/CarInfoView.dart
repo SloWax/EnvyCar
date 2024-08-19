@@ -27,22 +27,56 @@ class _CarInfoViewState extends State<CarInfoView> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          leading: IconButton(
-            icon: CarManager().token != 'user'
-                ? const Icon(Icons.cloud_done)
-                : const Icon(Icons.cloud),
-            onPressed: () {
-              if (CarManager().token != 'user') {
-                print('connected');
-              } else {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginView(isFirst: false)));
-                print('not connect');
-              }
-            },
-          ),
+          leading: Consumer<CarInfoVM>(builder: (context, vm, child) {
+            return IconButton(
+              icon: CarManager().token != 'user'
+                  ? const Icon(Icons.cloud_done)
+                  : const Icon(Icons.cloud),
+              onPressed: () {
+                if (CarManager().token != 'user') {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('동기화 해제',
+                            style: TextStyle(fontSize: 24)),
+                        content: const Text(
+                            '동기화 해제를 하면 계정이 삭제되고 백업된 정보가 사라지게 됩니다.\n동기화를 해제할까요?',
+                            style: TextStyle(fontSize: 18)),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('해제',
+                                style:
+                                    TextStyle(fontSize: 18, color: Colors.red)),
+                            onPressed: () {
+                              context.read<CarInfoVM>().logout();
+
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: const Text('아니오',
+                                style: TextStyle(fontSize: 18)),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                  print('connected');
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const LoginView(isFirst: false)));
+                  print('not connect');
+                }
+              },
+            );
+          }),
           title: const Text('차량 정보'),
           actions: const [PopupMenuWidget()],
         ),
