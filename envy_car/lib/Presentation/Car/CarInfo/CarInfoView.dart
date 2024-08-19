@@ -65,14 +65,12 @@ class _CarInfoViewState extends State<CarInfoView> {
                       );
                     },
                   );
-                  print('connected');
                 } else {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
                               const LoginView(isFirst: false)));
-                  print('not connect');
                 }
               },
             );
